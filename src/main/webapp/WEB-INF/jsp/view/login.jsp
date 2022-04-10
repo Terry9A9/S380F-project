@@ -9,12 +9,8 @@
 <html>
 <body>
 <h1>Login</h1>
-<c:if test="${param eq '{error=}'}">
-    error<br />
-</c:if>
-<c:if test="${param eq '{logout=}'}">
-    logout successful<br />
-</c:if>
+
+<p style="color: ${color}">${info}</p>
 
 <form action="login" method='POST'>
     User: <input type='text' name='username'><br />
@@ -23,5 +19,7 @@
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     <input name="submit" type="submit" value="Log In" /><br />
 </form>
+<c:url var="registration" value="/registration"/>
+<a href="${registration}">New Student Registration</a>
 </body>
 </html>
