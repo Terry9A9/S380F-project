@@ -2,3 +2,5 @@
 /target/
 /lib/
 /.idea/
+derby.log
+src/main/webapp/WEB-INF/securitybak.xml
