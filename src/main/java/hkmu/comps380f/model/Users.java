@@ -1,18 +1,25 @@
 package hkmu.comps380f.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class Student implements Serializable {
+public class Users implements Serializable {
 
     private String username;
     private String password;
     private String fullName;
     private String phoneNumber;
     private String address;
-    private String role = "ROLE_USER";
+    private List<String> roles = new ArrayList<>();;
 
-    public String getRole() {
-        return role;
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String[] roles) {
+        this.roles = new ArrayList<>(Arrays.asList(roles));
     }
 
     public String getUsername() {

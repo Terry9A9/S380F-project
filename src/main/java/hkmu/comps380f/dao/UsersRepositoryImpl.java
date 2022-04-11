@@ -1,31 +1,33 @@
 package hkmu.comps380f.dao;
 
-import hkmu.comps380f.model.Student;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import hkmu.comps380f.model.Users;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
-import org.springframework.jdbc.core.RowMapper;
 
 @Repository
-public class StudentRepositoryImpl implements StudentRepository{
+public class UsersRepositoryImpl implements UsersRepository {
 
     private final JdbcOperations jdbcOp;
 
     @Autowired
-    public StudentRepositoryImpl(DataSource dataSource) {
+    public UsersRepositoryImpl(DataSource dataSource) {
         this.jdbcOp = new JdbcTemplate(dataSource);
     }
 
-//    private static final class EntryRowMapper implements RowMapper<Student> {
+//    private static final class EntryRowMapper implements RowMapper<Users> {
 //        @Override
-//        public Student mapRow(ResultSet rs, int i) throws SQLException {
-//            Student entry = new Student();
+//        public Users mapRow(ResultSet rs, int i) throws SQLException {
+//            Users entry = new Users();
 //            entry.setId(rs.getInt("id"));
 //            entry.setName(rs.getString("name"));
 //            entry.setMessage(rs.getString("message"));
@@ -41,23 +43,27 @@ public class StudentRepositoryImpl implements StudentRepository{
             = "insert into USER_ROLES (username, ROLE) values (?, ?)";
 
     @Override
-    public void addEntry(Student e) {
+    @Transactional
+    public void addEntry(Users e) {
 
-            jdbcOp.update(SQL_INSERT_student,
-                    e.getUsername(),
-                    e.getPassword(),
-                    e.getFullName(),
-                    e.getPhoneNumber(),
-                    e.getAddress()
-            );
+        jdbcOp.update(SQL_INSERT_student,
+                e.getUsername(),
+                e.getPassword(),
+                e.getFullName(),
+                e.getPhoneNumber(),
+                e.getAddress()
+        );
+        for (String role : e.getRoles()) {
             jdbcOp.update(SQL_INSERT_role,
                     e.getUsername(),
-                    e.getRole()
+                    role
             );
+        }
+
     }
 
     @Override
-    public List<Student> listEntries() {
+    public List<Users> listEntries() {
         return null;
     }
 }

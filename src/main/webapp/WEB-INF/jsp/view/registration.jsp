@@ -13,7 +13,7 @@
 <body>
     <p style="color: red">${error}</p>
     <form:form method="POST" enctype="multipart/form-data"
-               modelAttribute="Student">
+               modelAttribute="Users">
         <form:label path="username">User Name*</form:label><br />
         <form:input type="text" path="username" /><br /><br />
         <form:label path="password">Password*</form:label><br />
@@ -21,9 +21,10 @@
         <form:label path="fullName">Full Name*</form:label><br />
         <form:input type="text" path="fullName" /><br /><br />
         <form:label path="phoneNumber">Phone Number*</form:label><br />
-        <form:input type="number" path="phoneNumber" max="8"/><br /><br />
+        <form:input type="number" path="phoneNumber" min="10000000" max="99999999"/><br /><br />
         <form:label path="address">Address*</form:label><br />
         <form:textarea path="address" rows="5" cols="30"/><br /><br />
+        <input type="hidden" name="roles" value="ROLE_USER"/>
         <input type="submit" value="Submit"/>
     </form:form>
         <c:url var="loginUrl" value="/login"/>
