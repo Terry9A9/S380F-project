@@ -37,7 +37,7 @@ public class UsersRepositoryImpl implements UsersRepository {
 //    }
 
     private static final String SQL_INSERT_student
-            = "insert into users (username, password, fullName, phoneNumber, address) values (?, ?, ?, ?, ?)";
+            = "insert into users values (?, ?, ?, ?, ?)";
 
     private static final String SQL_INSERT_role
             = "insert into USER_ROLES (username, ROLE) values (?, ?)";
