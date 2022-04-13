@@ -1,6 +1,6 @@
 <%--
   Created by IntelliJ IDEA.
-  User: Terry
+  WebUser: Terry
   Date: 10/4/2022
   Time: 2:56 PM
   To change this template use File | Settings | File Templates.
@@ -12,6 +12,10 @@
 
 <p style="color: ${color}">${info}</p>
 
+<security:authorize access="isAuthenticated()">
+    <c:redirect url="/"/>
+</security:authorize>
+
 <form action="login" method='POST'>
     User: <input type='text' name='username'><br />
     Password: <input type='password' name='password' /><br />
@@ -19,7 +23,7 @@
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     <input name="submit" type="submit" value="Log In" /><br />
 </form>
-<c:url var="registration" value="/registration"/>
+<c:url var="registration" value="/user/registration"/>
 <a href="${registration}">New Student Registration</a>
 </body>
 </html>

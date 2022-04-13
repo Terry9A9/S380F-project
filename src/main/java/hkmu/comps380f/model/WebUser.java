@@ -5,21 +5,33 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Users implements Serializable {
+public class WebUser implements Serializable {
 
     private String username;
     private String password;
     private String fullName;
     private String phoneNumber;
     private String address;
-    private List<String> roles = new ArrayList<>();;
+    private List<String> roles = new ArrayList<>();
+
+    public WebUser(){}
+
+    public WebUser(String username, String password, String fullName,
+                    String phoneNumber, String address, String[] roles){
+        this.username = username;
+        this.fullName = fullName;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.password = "{noop}"+password;
+        this.roles = new ArrayList<>(Arrays.asList(roles));
+    }
 
     public List<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(String[] roles) {
-        this.roles = new ArrayList<>(Arrays.asList(roles));
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
     }
 
     public String getUsername() {
@@ -35,7 +47,11 @@ public class Users implements Serializable {
     }
 
     public void setPassword(String password) {
-        this.password = "{noop}"+password;
+        this.password = password;
+    }
+
+    public void setPasswordFromDB(String password) {
+        this.password = password;
     }
 
     public String getFullName() {

@@ -9,16 +9,15 @@
     <b:bean id="dataSource"
             class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <b:property name="driverClassName" value="org.apache.derby.jdbc.ClientDriver" />
-        <b:property name="url" value="jdbc:derby://localhost:1527/Account" />
-        <b:property name="username" value="nbuser" />
-        <b:property name="password" value="nbuser" />
+        <b:property name="url" value="jdbc:derby://localhost:1527/S380F" />
     </b:bean>
 
     <http auto-config="true">
         <intercept-url pattern="/" access="permitAll"/>
         <intercept-url pattern="/index" access="permitAll"/>
         <intercept-url pattern="/login" access="permitAll"/>
-        <intercept-url pattern="/registration" access="permitAll"/>
+        <intercept-url pattern="/user/registration" access="permitAll"/>
+        <intercept-url pattern="/user/**" access="hasRole('ADMIN')"/>
         <intercept-url pattern="/**" access="isAuthenticated()"/>
         <form-login login-page="/login"
                     authentication-failure-url="/login?error"
