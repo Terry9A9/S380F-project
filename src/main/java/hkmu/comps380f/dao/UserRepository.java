@@ -8,6 +8,8 @@ public interface UserRepository {
 
     public void addUser(WebUser WebUser);
 
+    public void updateUser(WebUser WebUser, String username);
+
     public List<WebUser> findAll();
 
     public List<WebUser> findUser(String username);

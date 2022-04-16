@@ -12,26 +12,26 @@ public class WebUser implements Serializable {
     private String fullName;
     private String phoneNumber;
     private String address;
-    private List<String> roles = new ArrayList<>();
+    private String role;
 
     public WebUser(){}
 
     public WebUser(String username, String password, String fullName,
-                    String phoneNumber, String address, String[] roles){
+                    String phoneNumber, String address, String role){
         this.username = username;
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.password = "{noop}"+password;
-        this.roles = new ArrayList<>(Arrays.asList(roles));
+        this.role = role;
     }
 
-    public List<String> getRoles() {
-        return roles;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getUsername() {

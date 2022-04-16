@@ -21,12 +21,13 @@ public class UsersController {
     private UserRepository UserRepo;
 
     public static class Form{
+
         private String username;
         private String password;
         private String fullName;
         private String phoneNumber;
         private String address;
-        private String[] roles;
+        private String role;
 
         public String getUsername() {
             return username;
@@ -68,27 +69,28 @@ public class UsersController {
             this.address = address;
         }
 
-        public String[] getRoles() {
-            return roles;
+        public String getRole() {
+            return role;
         }
 
-        public void setRoles(String[] roles) {
-            this.roles = roles;
+
+        public void setRole(String role) {
+            this.role = role;
         }
     }
 
     @GetMapping("/registration")
     public ModelAndView Registration() {
+
         return new ModelAndView("registration", "User", new Form());
     }
 
     @PostMapping("/registration")
     public ModelAndView addStudentHandle(Form form, Model model) {
-
         boolean success = true;
         try{
             WebUser user = new WebUser(form.getUsername(), form.getPassword(), form.fullName,form.phoneNumber,
-                    form.getAddress(), form.getRoles());
+                    form.getAddress(), "ROLE_USER");
             UserRepo.addUser(user);
         }catch (Exception DerbySQLIntegrityConstraintViolationException){
             success = false;
@@ -102,19 +104,30 @@ public class UsersController {
     }
 
     @GetMapping("/edit/{username}")
-    public String queryUser(@PathVariable("username") String username, Model model) {
+    public ModelAndView queryUser(@PathVariable("username") String username, Model model) {
         model.addAttribute("UserInfo",UserRepo.findUser(username));
-        return "registration";
+        return new ModelAndView("registration", "User", new Form());
     }
 
     @PostMapping("/edit/{username}")
-    public String queryUser(Form form, Model model) {
+    public ModelAndView queryUser(Form form, Model model,@PathVariable("username") String username) {
         WebUser user = new WebUser(form.getUsername(), form.getPassword(), form.fullName,form.phoneNumber,
-                form.getAddress(), form.getRoles());
-        UserRepo.addUser(user);
-        return "registration";
-    }
+                form.getAddress(), form.getRole());
+        boolean success = true;
+        try{
+            UserRepo.updateUser(user, username);
+        }catch (Exception DerbySQLIntegrityConstraintViolationException){
 
+            success = false;
+        }
+        if (success){
+            return new ModelAndView("redirect:/index?editSuccessful");
+        }else{
+            model.addAttribute("error", "error");
+            model.addAttribute("UserInfo",UserRepo.findUser(username));
+            return new ModelAndView("registration","User", new Form());
+        }
+    }
 
     @GetMapping("/delete/{username}")
     public View deleteUser(@PathVariable("username") String username) {

@@ -35,7 +35,7 @@
         .fixed_header th, .fixed_header td {
             padding: 5px;
             text-align: left;
-            width: 200px;
+            width: 150px;
         }
     </style>
 </head>
@@ -60,7 +60,10 @@ i am a index
     <c:if test="${param.successful != null}">
         <p style="color: green">Delete Successful</p>
     </c:if>
-    <a href="/user/registration">Add new user</a>
+    <c:if test="${param.editSuccessful != null}">
+        <p style="color: green">Edit Successful</p>
+    </c:if>
+    <a href="/user/registration">Add new user</a><br/>
     <c:choose>
         <c:when test="${fn:length(Users) == 0}">
             <i>There are no users in the system.</i>
@@ -80,17 +83,11 @@ i am a index
                 <tbody>
                 <c:forEach items="${Users}" var="user">
                     <tr>
-                        <td><a href="<c:url value="/user/edit/${user.username}"/>">${user.username}</a></td>
+                        <td><a href="<c:url value="/user/edit/${user.username}"/>"> ${user.username}</a></td>
                         <td>${user.password}</td>
                         <td>${user.fullName}</td>
                         <td>${user.address}</td>
-                        <td>${user.roles}</td>
-                        <td>
-                            <c:forEach items="${user.roles}" var="role" varStatus="status">
-                                <c:if test="${!status.first}">, </c:if>
-                                ${role}
-                            </c:forEach>
-                        </td>
+                        <td>${user.role}</td>
                         <td>
                             [<a href="<c:url value="/user/delete/${user.username}" />">Delete</a>]
                         </td>

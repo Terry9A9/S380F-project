@@ -40,10 +40,7 @@ public class UserRepositoryImpl implements UserRepository {
 //    }
 
     private static final String SQL_INSERT_student
-            = "insert into users values (?, ?, ?, ?, ?)";
-
-    private static final String SQL_INSERT_role
-            = "insert into USER_ROLES (username, ROLE) values (?, ?)";
+            = "insert into users values (?, ?, ?, ?, ?,?)";
 
     @Override
     @Transactional
@@ -54,23 +51,34 @@ public class UserRepositoryImpl implements UserRepository {
                 WebUser.getPassword(),
                 WebUser.getFullName(),
                 WebUser.getPhoneNumber(),
-                WebUser.getAddress()
+                WebUser.getAddress(),
+                WebUser.getRole()
         );
-        for (String role : WebUser.getRoles()) {
-            jdbcOp.update(SQL_INSERT_role,
-                    WebUser.getUsername(),
-                    role
-            );
-        }
-
     }
 
+    private static final String SQL_UPDATE_student
+            = "update users SET username=?, password=?, fullname=?, phonenumber=?, address=?, user_type=? WHERE USERNAME=?";
+
+    @Override
+    @Transactional
+    public void updateUser(WebUser WebUser, String username) {
+
+        jdbcOp.update(SQL_UPDATE_student,
+                WebUser.getUsername(),
+                WebUser.getPassword(),
+                WebUser.getFullName(),
+                WebUser.getPhoneNumber(),
+                WebUser.getAddress(),
+                WebUser.getRole(),
+                username
+        );
+    }
 
     @Override
     @Transactional(readOnly = true)
     public List<WebUser> findAll() {
         final String SQL_SELECT_USERS
-                = "select users.*, user_roles.role from users, user_roles where users.username = user_roles.username";
+                = "select * from users order by USERNAME";
         return jdbcOp.query(SQL_SELECT_USERS, new UserExtractor());
     }
 
@@ -78,8 +86,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Transactional(readOnly = true)
     public List<WebUser> findUser(String username) {
         final String SQL_SELECT_USERS_BY_ID
-                = "select users.*, user_roles.ROLE from users, user_roles " +
-                "where users.USERNAME = user_roles.USERNAME and users.USERNAME = ?";
+                = "select * from users where USERNAME = ?";
         return jdbcOp.query(SQL_SELECT_USERS_BY_ID, new UserExtractor(), username);
     }
 
@@ -94,14 +101,13 @@ public class UserRepositoryImpl implements UserRepository {
                 if (user == null) {
                     user = new WebUser();
                     user.setUsername(username);
-                    user.setPasswordFromDB(rs.getString("password"));
+                    user.setPasswordFromDB(rs.getString("password").substring(6));
                     user.setFullName(rs.getString("fullname"));
                     user.setPhoneNumber(rs.getString("phonenumber"));
                     user.setAddress(rs.getString("address"));
+                    user.setRole(rs.getString("user_type"));
                     map.put(username, user);
                 }
-                user.getRoles().add(rs.getString("role"));
-                System.out.println(user.getUsername()+user.getPassword());
             }
             return new ArrayList<>(map.values());
         }
@@ -111,8 +117,6 @@ public class UserRepositoryImpl implements UserRepository {
     @Transactional
     public void delete(String username) {
         final String SQL_DELETE_USER = "delete from users where username=?";
-        final String SQL_DELETE_ROLES = "delete from user_roles where username=?";
-        jdbcOp.update(SQL_DELETE_ROLES, username);
         jdbcOp.update(SQL_DELETE_USER, username);
     }
 

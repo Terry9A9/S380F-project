@@ -14,11 +14,20 @@ import javax.annotation.Resource;
 public class IndexController {
 
     @Resource
-    private UserRepository UsersRepo;
+    private UserRepository UserRepo;
+
+//    @PreAuthorize("hasRole('ADMIN')")
+//    @GetMapping("/lecturer")
+//    public String lecturerIndex(ModelMap model) {
+//        model.addAttribute("Users", UserRepo.findAll());
+//        return "lecturerIndex";
+//    }
 
     @GetMapping("")
-    public String list(ModelMap model) {
-        model.addAttribute("Users", UsersRepo.findAll());
-        return "index";
+    public String userIndex(ModelMap model) {
+        model.addAttribute("Users", UserRepo.findAll());
+        return "indexLecturers";
     }
+
+
 }

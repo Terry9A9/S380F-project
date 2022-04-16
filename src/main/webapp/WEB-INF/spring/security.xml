@@ -18,6 +18,10 @@
         <intercept-url pattern="/login" access="permitAll"/>
         <intercept-url pattern="/user/registration" access="permitAll"/>
         <intercept-url pattern="/user/**" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/index/lecturer" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/course/*/add" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/course/*/*/delete/**" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/course/*/edit/*" access="hasRole('ADMIN')"/>
         <intercept-url pattern="/**" access="isAuthenticated()"/>
         <form-login login-page="/login"
                     authentication-failure-url="/login?error"
@@ -39,7 +43,7 @@
         <authentication-provider>
             <jdbc-user-service data-source-ref="dataSource"
                                users-by-username-query="SELECT username, password, true FROM users WHERE username=?"
-                               authorities-by-username-query="SELECT username, role FROM user_roles WHERE username=?" />
+                               authorities-by-username-query="SELECT username, user_type FROM users WHERE username=?" />
         </authentication-provider>
     </authentication-manager>
 
