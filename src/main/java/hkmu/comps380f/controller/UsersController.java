@@ -90,7 +90,7 @@ public class UsersController {
         boolean success = true;
         try{
             WebUser user = new WebUser(form.getUsername(), form.getPassword(), form.fullName,form.phoneNumber,
-                    form.getAddress(), "ROLE_USER");
+                    form.getAddress(), form.getRole());
             UserRepo.addUser(user);
         }catch (Exception DerbySQLIntegrityConstraintViolationException){
             success = false;

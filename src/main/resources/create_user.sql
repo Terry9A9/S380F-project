@@ -9,6 +9,6 @@ CREATE TABLE users (
 );
 
 
-insert into users values ('keith', '{noop}keithpw', 'cskeith', '1234568','address','ROLE_ADMIN');
+insert into USER_INFO values ('keith', '{noop}keithpw', 'cskeith', '1234568','address','ROLE_ADMIN');
 
-INSERT INTO users VALUES ('john', '{noop}johnpw', 'john', '1234568','address','ROLE_USER');
+INSERT INTO USER_INFO VALUES ('john', '{noop}johnpw', 'john', '1234568','address','ROLE_USER');

@@ -40,7 +40,6 @@
     </style>
 </head>
 <body>
-i am a index
 <security:authorize access="isAuthenticated()">
     <c:url var="logoutUrl" value="/logout"/>
     <form action="${logoutUrl}" method="post">

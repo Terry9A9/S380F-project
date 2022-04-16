@@ -4,7 +4,8 @@ CREATE TABLE course (
                          PRIMARY KEY (id)
 );
 CREATE TABLE lecture (
-                        id INTEGER NOT NULL,
+                        id int NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+                        lecture_num VARCHAR(255) NOT NULL,
                         title VARCHAR(255) NOT NULL,
                         course_id VARCHAR(255) DEFAULT NULL,
                         PRIMARY KEY (id),
@@ -15,7 +16,6 @@ CREATE TABLE  course_material (
                         filename VARCHAR(255) DEFAULT NULL,
                         content_type VARCHAR(255) DEFAULT NULL,
                         content BLOB DEFAULT NULL,
-                        lecture_id INTEGER DEFAULT NULL,
-                        PRIMARY KEY (id),
-                        FOREIGN KEY (lecture_id) REFERENCES lecture(id)
+                        lecture_id VARCHAR(255) DEFAULT NULL,
+                        PRIMARY KEY (id)
 );

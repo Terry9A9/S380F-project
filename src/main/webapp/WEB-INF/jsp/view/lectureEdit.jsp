@@ -11,11 +11,11 @@
     <title>Edit Lecture</title>
 </head>
 <body>
-
+${lectureInfo[0].id}
 <form:form method="POST" enctype="multipart/form-data"
            modelAttribute="lectureForm">
-    <form:label path="id">Lecture number </form:label><br />
-    <form:input type="number" path="id" min="1" value="${lectureInfo[0].id}" disabled="true"/><br /><br />
+    <form:label path="lecture_num">Lecture number </form:label><br />
+    <form:input type="number" path="lecture_num" min="1" value="${lectureInfo[0].lecture_num}"/><br /><br />
     <form:label path="title">Lecture title</form:label><br />
     <form:input path="title" type="text"  value="${lectureInfo[0].title}"/><br /><br />
 
@@ -24,7 +24,7 @@
             <c:forEach items="${lectureInfo[0].attachments}" var="attachment">
                 <li>
                     <c:out value="${attachment.name}" />
-                    [<a href="<c:url value="/course/${lectureInfo[0].course_id}/lecture${lectureInfo[0].id}/delete/attachment/${attachment.id}" />">Delete</a>]
+                    [<a href="<c:url value="/course/${lectureInfo[0].course_id}/ID${lectureInfo[0].id}/delete/attachment/${attachment.id}" />">Delete</a>]
                 </li>
             </c:forEach>
         </ul>
@@ -32,5 +32,9 @@
     <input type="file" name="attachments" multiple="multiple"/><br/><br/>
     <input type="submit" value="Save"/>
 </form:form>
+<c:url var="ViewUrl" value="/course/${lectureInfo[0].course_id}/ID${lectureInfo[0].id}"/>
+<form action="${ViewUrl}" method="get">
+    <input type="submit" value="View"/>
+</form>
 </body>
 </html>

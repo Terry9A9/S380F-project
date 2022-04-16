@@ -42,9 +42,6 @@
                 <form:radiobutton path="role" value="ROLE_ADMIN"/>ROLE_ADMIN<br/><br/>
             </c:otherwise>
         </c:choose>
-
-
-
     </security:authorize>
     <input type="submit" value="Submit"/>
 </form:form>

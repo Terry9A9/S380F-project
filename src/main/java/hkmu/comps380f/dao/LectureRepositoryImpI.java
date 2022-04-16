@@ -4,20 +4,16 @@ import hkmu.comps380f.model.Attachment;
 import hkmu.comps380f.model.Lecture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.core.support.SqlLobValue;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.DataSource;
-import java.sql.Blob;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,19 +35,20 @@ public class LectureRepositoryImpI implements LectureRepository {
         public List<Lecture> extractData(ResultSet rs) throws SQLException, DataAccessException {
             Map<Integer, Lecture> map = new HashMap<>();
             while (rs.next()) {
-                Integer id = rs.getInt("id");
+                Integer id = rs.getInt("lecture_id");
                 Lecture Lecture = map.get(id);
                 if (Lecture == null) {
                     Lecture = new Lecture();
                     Lecture.setId(id);
+                    Lecture.setLecture_num(rs.getString("lecture_num"));
                     Lecture.setTitle(rs.getString("title"));
-                    Lecture.setCourse_id(rs.getString("course_id"));
+                    Lecture.setCourse_id(rs.getString("course_code"));
                     map.put(id, Lecture);
                 }
                 String filename = rs.getString("filename");
                 if (filename != null) {
                     Attachment attachment = new Attachment();
-                    attachment.setId(rs.getInt(4));
+                    attachment.setId(rs.getInt("attachment_id"));
                     attachment.setName(rs.getString("filename"));
                     attachment.setMimeContentType(rs.getString("content_type"));
                     attachment.setLecture_Id(rs.getInt("lecture_id"));
@@ -67,43 +64,72 @@ public class LectureRepositoryImpI implements LectureRepository {
     @Transactional(readOnly = true)
     public List<Lecture> findLecture(int lecture_id) {
         final String SQL_SELECT_Lecture_BY_ID
-                = "select l.*, a.* from LECTURE as l left join COURSE_MATERIAL a on l.id = a.LECTURE_ID where l.id = ?";
+                = "select l.*, a.* from LECTURE_INFO as l left join COURSE_MATERIAL a on l.LECTURE_ID = a.LECTURE_ID where l.LECTURE_ID = ?";
         return jdbcOp.query(SQL_SELECT_Lecture_BY_ID, new LectureExtractor(),lecture_id);
     }
 
-    private static final String SQL_INSERT_lecture
-            = "insert into lecture values (?, ?, ?)";
+    @Override
+    @Transactional(readOnly = true)
+    public List<Lecture> findAll() {
+        final String SQL_SELECT_Lecture
+                = "select l.*, a.* from LECTURE_INFO as l left join COURSE_MATERIAL a on l.LECTURE_ID = a.LECTURE_ID";
+        return jdbcOp.query(SQL_SELECT_Lecture, new LectureExtractor());
+    }
 
-    private static final String SQL_INSERT_attachment
-            = "insert into COURSE_MATERIAL (filename, CONTENT_TYPE, content , LECTURE_ID) values (?, ?, ?, ?)";
+    private static final String SQL_INSERT_lecture
+            = "insert into LECTURE_INFO (COURSE_CODE, LECTURE_NUM, TITLE ) values (?, ?, ?)";
 
     @Override
     @Transactional
-    public void addLecture(Lecture lecture) {
-        jdbcOp.update(SQL_INSERT_lecture,
-                lecture.getId(),
-                lecture.getTitle(),
-                lecture.getCourse_id()
-        );
+    public void addLecture(final Lecture lecture, List<MultipartFile> attachments) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcOp.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection connection)
+                    throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(SQL_INSERT_lecture,
+                        new String[]{"id"});
+                ps.setString(1, lecture.getCourse_id());
+                ps.setString(2, lecture.getLecture_num());
+                ps.setString(3, lecture.getTitle());
+                return ps;
+            }
+        }, keyHolder);
+
+        int lecture_id = keyHolder.getKey().intValue();
+        for (MultipartFile filePart : attachments) {
+            if (filePart.getOriginalFilename() != null && filePart.getSize() > 0) {
+                try {
+                    jdbcOp.update(SQL_INSERT_ATTACHMENT,
+                            new Object[]{filePart.getOriginalFilename(),
+                                    filePart.getContentType(),
+                                    new SqlLobValue(filePart.getInputStream(),
+                                            (int)filePart.getSize()),
+                                    lecture_id},
+                            new int[]{Types.VARCHAR, Types.VARCHAR,Types.BLOB, Types.INTEGER}
+                    );
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public static final String SQL_UPDATE_LECTURE
-            = "update LECTURE set  TITLE=? where id=?";
+            = "update LECTURE_INFO set LECTURE_NUM=?, TITLE=? where LECTURE_ID=?";
     @Override
-    public void editLecture(String title, int oldLecture_id){
-        jdbcOp.update(SQL_UPDATE_LECTURE, title,oldLecture_id);
+    public void editLecture(String lecture_num, String title, int oldLecture_id){
+        jdbcOp.update(SQL_UPDATE_LECTURE,lecture_num, title,oldLecture_id);
     }
 
     public static final String SQL_INSERT_ATTACHMENT
-            = "insert into COURSE_MATERIAL (filename,content_type,  content,LECTURE_ID) values (?,?,?,?)";
+            = "insert into COURSE_MATERIAL (filename,content_type,content,LECTURE_ID) values (?,?,?,?)";
 
     @Override
     public void addAttachment(List<MultipartFile> attachments,int lecture_id){
         for (MultipartFile filePart : attachments) {
-            System.out.println(filePart.getOriginalFilename()+filePart.getSize());
             if (filePart.getOriginalFilename() != null && filePart.getSize() > 0) {
                 try {
-                    System.out.println(filePart.getInputStream());
                     jdbcOp.update(SQL_INSERT_ATTACHMENT,
                             new Object[]{filePart.getOriginalFilename(),
                                     filePart.getContentType(),
@@ -122,14 +148,14 @@ public class LectureRepositoryImpI implements LectureRepository {
     @Override
     @Transactional
     public Attachment getAttachment(int id) {
-        final String SQL_SELECT_ATTACHMENT = "select * from course_material where id=?";
+        final String SQL_SELECT_ATTACHMENT = "select * from course_material where attachment_id=?";
         return jdbcOp.queryForObject(SQL_SELECT_ATTACHMENT, new AttachmentRowMapper(), id);
     }
 
     @Override
     public void deleteAttachment(int attachment_id) {
         final String SQL_DELETE_ATTACHMENT
-                = "delete from COURSE_MATERIAL where id=?";
+                = "delete from COURSE_MATERIAL where attachment_id=?";
         jdbcOp.update(SQL_DELETE_ATTACHMENT, attachment_id);
     }
 

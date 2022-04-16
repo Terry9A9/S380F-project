@@ -40,12 +40,11 @@ public class UserRepositoryImpl implements UserRepository {
 //    }
 
     private static final String SQL_INSERT_student
-            = "insert into users values (?, ?, ?, ?, ?,?)";
+            = "insert into USER_INFO values (?, ?, ?, ?, ?,?)";
 
     @Override
     @Transactional
     public void addUser(WebUser WebUser) {
-
         jdbcOp.update(SQL_INSERT_student,
                 WebUser.getUsername(),
                 WebUser.getPassword(),
@@ -57,12 +56,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     private static final String SQL_UPDATE_student
-            = "update users SET username=?, password=?, fullname=?, phonenumber=?, address=?, user_type=? WHERE USERNAME=?";
+            = "update USER_INFO SET USER_NAME=?, USER_pw=?, user_fullname=?, user_phone=?, user_address=?, user_type=? WHERE USER_NAME=?";
 
     @Override
     @Transactional
     public void updateUser(WebUser WebUser, String username) {
-
         jdbcOp.update(SQL_UPDATE_student,
                 WebUser.getUsername(),
                 WebUser.getPassword(),
@@ -78,7 +76,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Transactional(readOnly = true)
     public List<WebUser> findAll() {
         final String SQL_SELECT_USERS
-                = "select * from users order by USERNAME";
+                = "select * from USER_INFO order by USER_NAME";
         return jdbcOp.query(SQL_SELECT_USERS, new UserExtractor());
     }
 
@@ -86,7 +84,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Transactional(readOnly = true)
     public List<WebUser> findUser(String username) {
         final String SQL_SELECT_USERS_BY_ID
-                = "select * from users where USERNAME = ?";
+                = "select * from USER_INFO where USER_NAME = ?";
         return jdbcOp.query(SQL_SELECT_USERS_BY_ID, new UserExtractor(), username);
     }
 
@@ -96,15 +94,15 @@ public class UserRepositoryImpl implements UserRepository {
                 throws SQLException, DataAccessException {
             Map<String, WebUser> map = new HashMap<>();
             while (rs.next()) {
-                String username = rs.getString("username");
+                String username = rs.getString("user_name");
                 WebUser user = map.get(username);
                 if (user == null) {
                     user = new WebUser();
                     user.setUsername(username);
-                    user.setPasswordFromDB(rs.getString("password").substring(6));
-                    user.setFullName(rs.getString("fullname"));
-                    user.setPhoneNumber(rs.getString("phonenumber"));
-                    user.setAddress(rs.getString("address"));
+                    user.setPasswordFromDB(rs.getString("user_pw").substring(6));
+                    user.setFullName(rs.getString("user_fullname"));
+                    user.setPhoneNumber(rs.getString("user_phone"));
+                    user.setAddress(rs.getString("user_address"));
                     user.setRole(rs.getString("user_type"));
                     map.put(username, user);
                 }
@@ -116,7 +114,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     @Transactional
     public void delete(String username) {
-        final String SQL_DELETE_USER = "delete from users where username=?";
+        final String SQL_DELETE_USER = "delete from USER_INFO where USER_NAME=?";
         jdbcOp.update(SQL_DELETE_USER, username);
     }
 

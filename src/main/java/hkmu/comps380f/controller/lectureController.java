@@ -22,21 +22,22 @@ import java.util.List;
 @Controller
 @RequestMapping("/course/{course_id}")
 public class lectureController {
+
     @Resource
     private LectureRepository LectureRepo;
 
     public static class Form {
 
-        private int id;
         private String title;
+        private String lecture_num;
         private List<MultipartFile> attachments;
 
-        public int getId() {
-            return id;
+        public String getLecture_num() {
+            return lecture_num;
         }
 
-        public void setId(int id) {
-            this.id = id;
+        public void setLecture_num(String lecture_num) {
+            this.lecture_num = lecture_num;
         }
 
         public String getTitle() {
@@ -56,14 +57,14 @@ public class lectureController {
         }
     }
 
-    @GetMapping("/lecture{lecture_id}")
+    @GetMapping("/ID{lecture_id}")
     public String viewLecture(@PathVariable("lecture_id") String lecture_id, ModelMap model, @PathVariable String course_id){
         model.addAttribute("lectureInfo", LectureRepo.findLecture(Integer.parseInt(lecture_id)));
         return "lectureView";
     }
 
 
-    @GetMapping("/lecture{lecture_id}/attachment/{attachment:.+}")
+    @GetMapping("/ID{lecture_id}/attachment/{attachment:.+}")
     public View download(@PathVariable("attachment") int id) {
         Attachment attachment = LectureRepo.getAttachment(id);
         if (attachment != null) {
@@ -82,10 +83,11 @@ public class lectureController {
     public ModelAndView addLectureHandle(Form form, Model model,@PathVariable("course_id") String course_id) {
         boolean success = true;
         try{
-            Lecture l = new Lecture(form.getId(), form.getTitle(), course_id);
-            LectureRepo.addLecture(l);
-            LectureRepo.addAttachment(form.getAttachments(), form.getId());
-        }catch (Exception DerbySQLIntegrityConstraintViolationException){
+            Lecture l = new Lecture(form.getLecture_num(), form.getTitle(), course_id);
+            LectureRepo.addLecture(l,form.getAttachments());
+            //LectureRepo.addAttachment(form.getAttachments(), form.get());
+        }catch (Exception e){
+            e.printStackTrace();
             success = false;
         }
         if (success){
@@ -96,21 +98,21 @@ public class lectureController {
         }
     }
 
-    @GetMapping("/edit/lecture{lecture_id}")
+    @GetMapping("/ID{lecture_id}/edit")
     public ModelAndView editLecture(@PathVariable("lecture_id") String lecture_id, ModelMap model, @PathVariable String course_id){
         model.addAttribute("lectureInfo", LectureRepo.findLecture(Integer.parseInt(lecture_id)));
         return new ModelAndView("lectureEdit", "lectureForm", new Form());
     }
 
-    @PostMapping("/edit/lecture{lecture_id}")
+    @PostMapping("/ID{lecture_id}/edit")
     public ModelAndView editLectureHandle(Form form, Model model,@PathVariable("course_id") String course_id, @PathVariable("lecture_id") String lecture_id){
-        LectureRepo.editLecture(form.getTitle(), Integer.parseInt(lecture_id));
+        LectureRepo.editLecture(form.getLecture_num(),form.getTitle(), Integer.parseInt(lecture_id));
         LectureRepo.addAttachment(form.getAttachments(), Integer.parseInt(lecture_id));
         model.addAttribute("lectureInfo", LectureRepo.findLecture(Integer.parseInt(lecture_id)));
         return new ModelAndView("lectureEdit", "lectureForm", new Form());
     }
 
-    @GetMapping("/lecture{lecture_id}/delete/attachment/{attachment_id}")
+    @GetMapping("/ID{lecture_id}/delete/attachment/{attachment_id}")
     public View deleteAttachment(@PathVariable("attachment_id") String attachment_id, @PathVariable("lecture_id") String lecture_id) {
         LectureRepo.deleteAttachment(Integer.parseInt(attachment_id));
         return new RedirectView("/course/"+attachment_id+"/edit/lecture"+lecture_id, true);
