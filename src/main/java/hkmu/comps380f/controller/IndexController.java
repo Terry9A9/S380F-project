@@ -1,5 +1,6 @@
 package hkmu.comps380f.controller;
 
+import org.springframework.security.core.Authentication;
 import hkmu.comps380f.dao.CourseRepository;
 import hkmu.comps380f.dao.LectureRepository;
 import hkmu.comps380f.dao.UserRepository;
@@ -59,6 +60,8 @@ public class IndexController {
 
     @GetMapping("/addCourse")
     public ModelAndView addCourse() {
+        Authentication authentication = null;
+        System.out.println(authentication.getName());
         return new ModelAndView("addCourse", "Course", new IndexController.Form());
     }
 

@@ -86,6 +86,9 @@
     <c:if test="${param.editSuccessful != null}">
         <p style="color: green">Edit Successful</p>
     </c:if>
+    <c:if test="${param.addSuccessful != null}">
+        <p style="color: green">Add Successful</p>
+    </c:if>
     <a href="/user/registration">Add new user</a><br/>
     <c:choose>
         <c:when test="${fn:length(Users) == 0}">
@@ -143,7 +146,7 @@
             <h3>${course.course_name} (${course.course_code})</h3>
             <security:authorize access="hasRole('ADMIN')">
                 <a href="/course/${course.course_code}/add">Add New Lecture</a>
-                <a href="/course/${course.course_code}/add" style="float: right;">Add New Poll</a>
+                <a href="/course/${course.course_code}/addPoll" style="float: right;">Add New Poll</a>
                 <br/>
             </security:authorize>
             <table class="fixed_header" style="display: inline-table;">

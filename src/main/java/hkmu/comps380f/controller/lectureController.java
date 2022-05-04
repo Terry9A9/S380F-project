@@ -1,8 +1,10 @@
 package hkmu.comps380f.controller;
 
 import hkmu.comps380f.dao.LectureRepository;
+import hkmu.comps380f.dao.PollRepository;
 import hkmu.comps380f.model.Attachment;
 import hkmu.comps380f.model.Lecture;
+import hkmu.comps380f.model.Poll;
 import hkmu.comps380f.view.DownloadView;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +27,8 @@ public class lectureController {
 
     @Resource
     private LectureRepository LectureRepo;
+    @Resource
+    private PollRepository PollRepo;
 
     public static class Form {
 
@@ -60,7 +64,6 @@ public class lectureController {
     public static class pollForm {
 
         private String question;
-        private String course_code;
         private String ans_a;
         private String ans_b;
         private String ans_c;
@@ -72,14 +75,6 @@ public class lectureController {
 
         public void setQuestion(String question) {
             this.question = question;
-        }
-
-        public String getCourse_code() {
-            return course_code;
-        }
-
-        public void setCourse_code(String course_code) {
-            this.course_code = course_code;
         }
 
         public String getAns_a() {
@@ -142,7 +137,6 @@ public class lectureController {
         try{
             Lecture l = new Lecture(form.getLecture_num(), form.getTitle(), course_id);
             LectureRepo.addLecture(l,form.getAttachments());
-            //LectureRepo.addAttachment(form.getAttachments(), form.get());
         }catch (Exception e){
             e.printStackTrace();
             success = false;
@@ -181,13 +175,21 @@ public class lectureController {
         return new RedirectView("/index?successful", true);
     }
 
-    @GetMapping("/ID{lecture_id}/addPoll")
-    public ModelAndView addPoll(@PathVariable("lecture_id") String lecture_id) {
-        return new ModelAndView("pollAdd", "poll", new pollForm());
+    @GetMapping("/addPoll")
+    public ModelAndView addPoll(@PathVariable String course_id) {
+        return new ModelAndView("pollAdd", "Poll", new pollForm());
     }
 
-    @PostMapping("/ID{lecture_id}/addPoll")
-    public ModelAndView addPollHandle(@PathVariable("lecture_id") String lecture_id) {
-        return new ModelAndView("pollAdd", "poll", new pollForm());
+    @PostMapping("/addPoll")
+    public ModelAndView addPollHandle(@PathVariable String course_id, pollForm pollForm) {
+        Poll p = new Poll(pollForm.getQuestion(),course_id,pollForm.getAns_a(),pollForm.getAns_b(),pollForm.getAns_c(),pollForm.getAns_d());
+        PollRepo.addPoll(p);
+        return new ModelAndView("redirect:/index?addSuccessful");
+    }
+
+    @GetMapping("/delete/Poll{poll_id}")
+    public View deletePoll(@PathVariable("poll_id") String poll_id) {
+        PollRepo.delete(Integer.parseInt(poll_id));
+        return new RedirectView("/index?successful", true);
     }
 }
