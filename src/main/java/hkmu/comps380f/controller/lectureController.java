@@ -57,12 +57,69 @@ public class lectureController {
         }
     }
 
+    public static class pollForm {
+
+        private String question;
+        private String course_code;
+        private String ans_a;
+        private String ans_b;
+        private String ans_c;
+        private String ans_d;
+
+        public String getQuestion() {
+            return question;
+        }
+
+        public void setQuestion(String question) {
+            this.question = question;
+        }
+
+        public String getCourse_code() {
+            return course_code;
+        }
+
+        public void setCourse_code(String course_code) {
+            this.course_code = course_code;
+        }
+
+        public String getAns_a() {
+            return ans_a;
+        }
+
+        public void setAns_a(String ans_a) {
+            this.ans_a = ans_a;
+        }
+
+        public String getAns_b() {
+            return ans_b;
+        }
+
+        public void setAns_b(String ans_b) {
+            this.ans_b = ans_b;
+        }
+
+        public String getAns_c() {
+            return ans_c;
+        }
+
+        public void setAns_c(String ans_c) {
+            this.ans_c = ans_c;
+        }
+
+        public String getAns_d() {
+            return ans_d;
+        }
+
+        public void setAns_d(String ans_d) {
+            this.ans_d = ans_d;
+        }
+    }
+
     @GetMapping("/ID{lecture_id}")
     public String viewLecture(@PathVariable("lecture_id") String lecture_id, ModelMap model, @PathVariable String course_id){
         model.addAttribute("lectureInfo", LectureRepo.findLecture(Integer.parseInt(lecture_id)));
         return "lectureView";
     }
-
 
     @GetMapping("/ID{lecture_id}/attachment/{attachment:.+}")
     public View download(@PathVariable("attachment") int id) {
@@ -122,5 +179,15 @@ public class lectureController {
     public View deleteLecture(@PathVariable("lecture_id") String lecture_id) {
         LectureRepo.deleteLecture(Integer.parseInt(lecture_id));
         return new RedirectView("/index?successful", true);
+    }
+
+    @GetMapping("/ID{lecture_id}/addPoll")
+    public ModelAndView addPoll(@PathVariable("lecture_id") String lecture_id) {
+        return new ModelAndView("pollAdd", "poll", new pollForm());
+    }
+
+    @PostMapping("/ID{lecture_id}/addPoll")
+    public ModelAndView addPollHandle(@PathVariable("lecture_id") String lecture_id) {
+        return new ModelAndView("pollAdd", "poll", new pollForm());
     }
 }

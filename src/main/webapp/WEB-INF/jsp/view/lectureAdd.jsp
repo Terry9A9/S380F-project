@@ -15,8 +15,7 @@
     <input type="submit" value="Home"/>
 </form>
 <p style="color: red">${error}</p>
-<form:form method="POST" enctype="multipart/form-data"
-           modelAttribute="lectureForm">
+<form:form method="POST" modelAttribute="lectureForm">
     <form:label path="lecture_num">Lecture number </form:label><br />
     <form:input type="number" path="lecture_num" min="1"/><br /><br />
     <form:label path="title">Lecture title</form:label><br />
