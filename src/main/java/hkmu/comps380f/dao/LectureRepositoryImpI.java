@@ -42,7 +42,7 @@ public class LectureRepositoryImpI implements LectureRepository {
                     Lecture.setId(id);
                     Lecture.setLecture_num(rs.getString("lecture_num"));
                     Lecture.setTitle(rs.getString("title"));
-                    Lecture.setCourse_id(rs.getString("course_code"));
+                    Lecture.setCourse_code(rs.getString("course_code"));
                     map.put(id, Lecture);
                 }
                 String filename = rs.getString("filename");
@@ -72,8 +72,15 @@ public class LectureRepositoryImpI implements LectureRepository {
     @Transactional(readOnly = true)
     public List<Lecture> findAll() {
         final String SQL_SELECT_Lecture
-                = "select l.*, a.* from LECTURE_INFO as l left join COURSE_MATERIAL a on l.LECTURE_ID = a.LECTURE_ID";
+                = "select l.*, c.* from LECTURE_INFO as l left join COURSE_MATERIAL c on l.LECTURE_ID = c.LECTURE_ID order by LECTURE_NUM";
         return jdbcOp.query(SQL_SELECT_Lecture, new LectureExtractor());
+    }
+
+    @Override
+    @Transactional
+    public void deleteLecture(int lecture_id) {
+        final String SQL_DELETE_USER = "delete from LECTURE_INFO where lecture_id=?";
+        jdbcOp.update(SQL_DELETE_USER, lecture_id);
     }
 
     private static final String SQL_INSERT_lecture
@@ -89,7 +96,7 @@ public class LectureRepositoryImpI implements LectureRepository {
                     throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(SQL_INSERT_lecture,
                         new String[]{"id"});
-                ps.setString(1, lecture.getCourse_id());
+                ps.setString(1, lecture.getCourse_code());
                 ps.setString(2, lecture.getLecture_num());
                 ps.setString(3, lecture.getTitle());
                 return ps;

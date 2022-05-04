@@ -24,6 +24,11 @@
     <input name="submit" type="submit" value="Log In" /><br />
 </form>
 <c:url var="registration" value="/user/registration"/>
-<a href="${registration}">New Student Registration</a>
+<form action="${registration}" method="get" style="display: inline">
+    <input type="submit" value="New User Registration"/>
+</form>
+<form action="/" method="get" style="display: inline">
+    <input type="submit" value="View as Visitor"/>
+</form>
 </body>
 </html>

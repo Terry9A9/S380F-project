@@ -11,6 +11,9 @@
     <title>Add lecture</title>
 </head>
 <body>
+<form action="/" method="get">
+    <input type="submit" value="Home"/>
+</form>
 <p style="color: red">${error}</p>
 <form:form method="POST" enctype="multipart/form-data"
            modelAttribute="lectureForm">

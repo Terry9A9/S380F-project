@@ -20,4 +20,6 @@ public interface LectureRepository {
     public Attachment getAttachment(int id);
 
     public List<Lecture> findAll();
+
+    public void deleteLecture(int lecture_id);
 }

@@ -113,8 +113,14 @@ public class lectureController {
     }
 
     @GetMapping("/ID{lecture_id}/delete/attachment/{attachment_id}")
-    public View deleteAttachment(@PathVariable("attachment_id") String attachment_id, @PathVariable("lecture_id") String lecture_id) {
+    public View deleteAttachment(@PathVariable("attachment_id") String attachment_id, @PathVariable("lecture_id") String lecture_id, @PathVariable String course_id) {
         LectureRepo.deleteAttachment(Integer.parseInt(attachment_id));
-        return new RedirectView("/course/"+attachment_id+"/edit/lecture"+lecture_id, true);
+        return new RedirectView("/course/"+course_id+"/ID"+lecture_id+"/edit", true);
+    }
+
+    @GetMapping("/delete/ID{lecture_id}")
+    public View deleteLecture(@PathVariable("lecture_id") String lecture_id) {
+        LectureRepo.deleteLecture(Integer.parseInt(lecture_id));
+        return new RedirectView("/index?successful", true);
     }
 }

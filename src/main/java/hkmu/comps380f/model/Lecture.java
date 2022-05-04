@@ -11,14 +11,14 @@ public class Lecture implements Serializable {
     private String lecture_num;
     private String title;
     private final Map<String, Attachment> attachments = new HashMap<>();
-    private String course_id;
+    private String course_code;
 
     public Lecture(){}
 
-    public Lecture(String  lecture_num, String title, String course_id){
+    public Lecture(String  lecture_num, String title, String course_code){
         this.lecture_num = lecture_num;
         this.title = title;
-        this.course_id = course_id;
+        this.course_code = course_code;
     }
 
     public int getId() {
@@ -57,11 +57,11 @@ public class Lecture implements Serializable {
         this.attachments.put(attachment.getName(), attachment);
     }
 
-    public String getCourse_id() {
-        return course_id;
+    public String getCourse_code() {
+        return course_code;
     }
 
-    public void setCourse_id(String course_id) {
-        this.course_id = course_id;
+    public void setCourse_code(String course_code) {
+        this.course_code = course_code;
     }
 }

@@ -17,6 +17,7 @@ import javax.annotation.Resource;
 @Controller
 @RequestMapping("/user")
 public class UsersController {
+
     @Resource
     private UserRepository UserRepo;
 
@@ -73,7 +74,6 @@ public class UsersController {
             return role;
         }
 
-
         public void setRole(String role) {
             this.role = role;
         }
@@ -86,19 +86,21 @@ public class UsersController {
     }
 
     @PostMapping("/registration")
-    public ModelAndView addStudentHandle(Form form, Model model) {
+    public ModelAndView addStudentHandle(Form form, Model model){
         boolean success = true;
         try{
             WebUser user = new WebUser(form.getUsername(), form.getPassword(), form.fullName,form.phoneNumber,
-                    form.getAddress(), form.getRole());
+                    form.getAddress(), "ROLE_USER");
             UserRepo.addUser(user);
-        }catch (Exception DerbySQLIntegrityConstraintViolationException){
+        }catch (Exception e){
+            System.out.println(e);
             success = false;
         }
         if (success){
             return new ModelAndView("redirect:/login?regSuccessful");
         }else{
-            model.addAttribute("error", "Username already exists");
+
+            model.addAttribute("error", "Error");
             return new ModelAndView("registration","User", new Form());
         }
     }
@@ -110,7 +112,7 @@ public class UsersController {
     }
 
     @PostMapping("/edit/{username}")
-    public ModelAndView queryUser(Form form, Model model,@PathVariable("username") String username) {
+    public ModelAndView queryUserHandle(Form form, Model model,@PathVariable("username") String username) {
         WebUser user = new WebUser(form.getUsername(), form.getPassword(), form.fullName,form.phoneNumber,
                 form.getAddress(), form.getRole());
         boolean success = true;

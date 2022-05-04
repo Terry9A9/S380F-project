@@ -45,9 +45,6 @@
     </security:authorize>
     <input type="submit" value="Submit"/>
 </form:form>
-
-
-
     <c:url var="loginUrl" value="/login"/>
     <form action="${loginUrl}" method="get">
         <input type="submit" value="Back"/>
