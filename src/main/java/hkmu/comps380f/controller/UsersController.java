@@ -21,7 +21,7 @@ public class UsersController {
     @Resource
     private UserRepository UserRepo;
 
-    public static class Form{
+    public static class Form {
 
         private String username;
         private String password;
@@ -86,48 +86,48 @@ public class UsersController {
     }
 
     @PostMapping("/registration")
-    public ModelAndView addStudentHandle(Form form, Model model){
+    public ModelAndView addStudentHandle(Form form, Model model) {
         boolean success = true;
-        try{
-            WebUser user = new WebUser(form.getUsername(), form.getPassword(), form.fullName,form.phoneNumber,
+        try {
+            WebUser user = new WebUser(form.getUsername(), form.getPassword(), form.fullName, form.phoneNumber,
                     form.getAddress(), "ROLE_USER");
             UserRepo.addUser(user);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
             success = false;
         }
-        if (success){
+        if (success) {
             return new ModelAndView("redirect:/login?regSuccessful");
-        }else{
+        } else {
 
             model.addAttribute("error", "Error");
-            return new ModelAndView("registration","User", new Form());
+            return new ModelAndView("registration", "User", new Form());
         }
     }
 
     @GetMapping("/edit/{username}")
     public ModelAndView queryUser(@PathVariable("username") String username, Model model) {
-        model.addAttribute("UserInfo",UserRepo.findUser(username));
+        model.addAttribute("UserInfo", UserRepo.findUser(username));
         return new ModelAndView("registration", "User", new Form());
     }
 
     @PostMapping("/edit/{username}")
-    public ModelAndView queryUserHandle(Form form, Model model,@PathVariable("username") String username) {
-        WebUser user = new WebUser(form.getUsername(), form.getPassword(), form.fullName,form.phoneNumber,
+    public ModelAndView queryUserHandle(Form form, Model model, @PathVariable("username") String username) {
+        WebUser user = new WebUser(form.getUsername(), form.getPassword(), form.fullName, form.phoneNumber,
                 form.getAddress(), form.getRole());
         boolean success = true;
-        try{
+        try {
             UserRepo.updateUser(user, username);
-        }catch (Exception DerbySQLIntegrityConstraintViolationException){
+        } catch (Exception DerbySQLIntegrityConstraintViolationException) {
 
             success = false;
         }
-        if (success){
+        if (success) {
             return new ModelAndView("redirect:/index?editSuccessful");
-        }else{
+        } else {
             model.addAttribute("error", "error");
-            model.addAttribute("UserInfo",UserRepo.findUser(username));
-            return new ModelAndView("registration","User", new Form());
+            model.addAttribute("UserInfo", UserRepo.findUser(username));
+            return new ModelAndView("registration", "User", new Form());
         }
     }
 

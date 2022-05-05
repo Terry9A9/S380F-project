@@ -20,24 +20,24 @@ public class RootController {
         return "login";
     }
 
-    @GetMapping(value = "/login",params="error")
+    @GetMapping(value = "/login", params = "error")
     public ModelAndView loginError(Model model) {
-        model.addAttribute("info","Incorrect username or password");
-        model.addAttribute("color","red");
+        model.addAttribute("info", "Incorrect username or password");
+        model.addAttribute("color", "red");
         return new ModelAndView("login");
     }
 
-    @GetMapping(value = "/login",params="logout")
+    @GetMapping(value = "/login", params = "logout")
     public ModelAndView loginLogout(Model model) {
-        model.addAttribute("info","Logout successful");
-        model.addAttribute("color","green");
+        model.addAttribute("info", "Logout successful");
+        model.addAttribute("color", "green");
         return new ModelAndView("login");
     }
 
-    @GetMapping(value = "/login",params="regSuccessful")
+    @GetMapping(value = "/login", params = "regSuccessful")
     public ModelAndView loginReg(Model model) {
-        model.addAttribute("info","Registration successful");
-        model.addAttribute("color","green");
+        model.addAttribute("info", "Registration successful");
+        model.addAttribute("color", "green");
         return new ModelAndView("login");
     }
 

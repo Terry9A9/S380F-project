@@ -14,19 +14,8 @@
     </form>
 </security:authorize>
 
-<security:authorize access="isAnonymous()">
-    <c:url var="loginUrl" value="/login"/>
-    <form action="${loginUrl}" method="get">
-        <input type="submit" value="log in"/>
-    </form>
-</security:authorize>
 <h1>Poll</h1>
-<security:authorize access="hasRole('ADMIN')">
 
-</security:authorize>
-
-
-<security:authorize access="hasRole('ADMIN')">
     <h1>Question: ${poll.question}</h1>
     <form:form method="post" modelAttribute="poll_choice" action="">
 
@@ -69,6 +58,5 @@
         <br/>
         <input type="submit" name="Vote" value="Vote"/>
     </form:form>
-</security:authorize>
 </body>
 </html>

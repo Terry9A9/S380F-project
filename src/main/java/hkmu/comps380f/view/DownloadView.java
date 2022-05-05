@@ -1,10 +1,11 @@
 package hkmu.comps380f.view;
 
-import java.util.Map;
+import org.springframework.web.servlet.View;
+
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.web.servlet.View;
+import java.util.Map;
 
 public class DownloadView implements View {
 

@@ -17,11 +17,11 @@
 </security:authorize>
 
 <form action="login" method='POST'>
-    User: <input type='text' name='username'><br />
-    Password: <input type='password' name='password' /><br />
-    Remember Me: <input type="checkbox" name="remember-me" /><br />
+    User: <input type='text' name='username'><br/>
+    Password: <input type='password' name='password'/><br/>
+    Remember Me: <input type="checkbox" name="remember-me"/><br/>
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-    <input name="submit" type="submit" value="Log In" /><br />
+    <input name="submit" type="submit" value="Log In"/><br/>
 </form>
 <c:url var="registration" value="/user/registration"/>
 <form action="${registration}" method="get" style="display: inline">

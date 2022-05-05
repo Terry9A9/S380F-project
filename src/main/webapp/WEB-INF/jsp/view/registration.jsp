@@ -34,7 +34,7 @@
         <form:label path="role">Role*</form:label><br/>
         <c:choose>
             <c:when test="${UserInfo[0].role eq 'ROLE_ADMIN'}">
-                <form:radiobutton path="role" value="ROLE_USER" />ROLE_USER
+                <form:radiobutton path="role" value="ROLE_USER"/>ROLE_USER
                 <form:radiobutton path="role" value="ROLE_ADMIN" checked="checked"/>ROLE_ADMIN<br/><br/>
             </c:when>
             <c:otherwise>
@@ -45,9 +45,9 @@
     </security:authorize>
     <input type="submit" value="Submit"/>
 </form:form>
-    <c:url var="loginUrl" value="/login"/>
-    <form action="${loginUrl}" method="get">
-        <input type="submit" value="Back"/>
-    </form>
+<c:url var="loginUrl" value="/login"/>
+<form action="${loginUrl}" method="get">
+    <input type="submit" value="Back"/>
+</form>
 </body>
 </html>

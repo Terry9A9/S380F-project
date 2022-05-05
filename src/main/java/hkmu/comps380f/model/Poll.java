@@ -2,7 +2,7 @@ package hkmu.comps380f.model;
 
 import java.io.Serializable;
 
-public class Poll implements Serializable{
+public class Poll implements Serializable {
 
     public Poll(String question, String course_code, String ans_a, String ans_b, String ans_c, String ans_d) {
         this.question = question;
@@ -20,7 +20,9 @@ public class Poll implements Serializable{
     private String ans_b;
     private String ans_c;
     private String ans_d;
-    public Poll(){}
+
+    public Poll() {
+    }
 
     public int getId() {
         return poll_id;

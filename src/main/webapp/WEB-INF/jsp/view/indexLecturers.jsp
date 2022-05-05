@@ -15,19 +15,23 @@
             table-layout: fixed;
             border-collapse: collapse;
         }
+
         .user_table tbody {
             display: block;
             width: 100%;
             overflow: auto;
             height: 100px;
         }
+
         .user_table thead tr {
             display: block;
         }
+
         .user_table thead {
             background: gray;
             color: #fff;
         }
+
         .user_table th, .user_table td {
             padding: 5px;
             text-align: left;
@@ -142,54 +146,54 @@
     </c:when>
     <c:otherwise>
         <c:forEach items="${Courses}" var="course">
-        <div>
-            <h3>${course.course_name} (${course.course_code})</h3>
-            <security:authorize access="hasRole('ADMIN')">
-                <a href="/course/${course.course_code}/add">Add New Lecture</a>
-                <a href="/course/${course.course_code}/addPoll" style="float: right;">Add New Poll</a>
-                <br/>
-            </security:authorize>
-            <table class="fixed_header" style="display: inline-table;">
-                <thead>
-                <tr>
-                    <th>Lecture Number</th>
-                    <th>Lecture Title</th>
-                    <security:authorize access="hasRole('ADMIN')">
-                        <th>Action</th>
-                    </security:authorize>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach items="${Lectures}" var="lecture">
-                    <c:if test="${lecture.course_code == course.course_code}">
-                        <tr>
-                            <td>${lecture.lecture_num}</td>
-                            <td><a href="/course/${course.course_code}/ID${lecture.id}">${lecture.title}</a></td>
-                            <security:authorize access="hasRole('ADMIN')">
-                                <td>
-                                    <a href="/course/${course.course_code}/delete/ID${lecture.id}">[Delete]</a>
-                                    <a href="/course/${course.course_code}/ID${lecture.id}/edit">[Edit]</a>
-                                </td>
-                            </security:authorize>
+            <div>
+                <h3>${course.course_name} (${course.course_code})</h3>
+                <security:authorize access="hasRole('ADMIN')">
+                    <a href="/course/${course.course_code}/add">Add New Lecture</a>
+                    <a href="/course/${course.course_code}/addPoll" style="float: right;">Add New Poll</a>
+                    <br/>
+                </security:authorize>
+                <table class="fixed_header" style="display: inline-table;">
+                    <thead>
+                    <tr>
+                        <th>Lecture Number</th>
+                        <th>Lecture Title</th>
+                        <security:authorize access="hasRole('ADMIN')">
+                            <th>Action</th>
+                        </security:authorize>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${Lectures}" var="lecture">
+                        <c:if test="${lecture.course_code == course.course_code}">
+                            <tr>
+                                <td>${lecture.lecture_num}</td>
+                                <td><a href="/course/${course.course_code}/ID${lecture.id}">${lecture.title}</a></td>
+                                <security:authorize access="hasRole('ADMIN')">
+                                    <td>
+                                        <a href="/course/${course.course_code}/delete/ID${lecture.id}">[Delete]</a>
+                                        <a href="/course/${course.course_code}/ID${lecture.id}/edit">[Edit]</a>
+                                    </td>
+                                </security:authorize>
 
-                        </tr>
-                    </c:if>
-                </c:forEach>
-                </tbody>
-            </table >
-            <table style="float: right;" class="fixed_header">
-                <thead>
-                <tr>
-                    <td>Poll</td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>Question1</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+                            </tr>
+                        </c:if>
+                    </c:forEach>
+                    </tbody>
+                </table>
+                <table style="float: right;" class="fixed_header">
+                    <thead>
+                    <tr>
+                        <td>Poll</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Question1</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </c:forEach>
     </c:otherwise>
 </c:choose>

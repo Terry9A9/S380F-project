@@ -6,8 +6,10 @@ package hkmu.comps380f.model;
 
 import java.io.Serializable;
 
-public class User_choice implements Serializable{
-public User_choice(){}
+public class User_choice implements Serializable {
+    public User_choice() {
+    }
+
     public int getChoice_id() {
         return choice_id;
     }
@@ -39,11 +41,11 @@ public User_choice(){}
     public void setPoll_id(String poll_id) {
         this.poll_id = poll_id;
     }
+
     private int choice_id;
     private String user_name;
     private String user_choice;
     private String poll_id;
 
-    
-    
+
 }

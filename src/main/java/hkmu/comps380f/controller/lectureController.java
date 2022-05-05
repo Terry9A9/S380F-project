@@ -20,7 +20,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Locale;
 
 @Controller
 @RequestMapping("/course/{course_id}")
@@ -112,7 +111,7 @@ public class lectureController {
     }
 
     @GetMapping("/ID{lecture_id}")
-    public String viewLecture(@PathVariable("lecture_id") String lecture_id, ModelMap model, @PathVariable String course_id){
+    public String viewLecture(@PathVariable("lecture_id") String lecture_id, ModelMap model, @PathVariable String course_id) {
         model.addAttribute("lectureInfo", LectureRepo.findLecture(Integer.parseInt(lecture_id)));
         return "lectureView";
     }
@@ -128,37 +127,37 @@ public class lectureController {
     }
 
     @GetMapping("/add")
-    public ModelAndView addLecture(){
+    public ModelAndView addLecture() {
         return new ModelAndView("lectureAdd", "lectureForm", new Form());
     }
 
     @PostMapping("/add")
-    public ModelAndView addLectureHandle(Form form, Model model,@PathVariable("course_id") String course_id) {
+    public ModelAndView addLectureHandle(Form form, Model model, @PathVariable("course_id") String course_id) {
         boolean success = true;
-        try{
+        try {
             Lecture l = new Lecture(form.getLecture_num(), form.getTitle(), course_id);
-            LectureRepo.addLecture(l,form.getAttachments());
-        }catch (Exception e){
+            LectureRepo.addLecture(l, form.getAttachments());
+        } catch (Exception e) {
             e.printStackTrace();
             success = false;
         }
-        if (success){
+        if (success) {
             return new ModelAndView("redirect:/index?addSuccessful");
-        }else{
+        } else {
             model.addAttribute("error", "Lecture number already exists");
-            return new ModelAndView("lectureAdd","lectureForm", new Form());
+            return new ModelAndView("lectureAdd", "lectureForm", new Form());
         }
     }
 
     @GetMapping("/ID{lecture_id}/edit")
-    public ModelAndView editLecture(@PathVariable("lecture_id") String lecture_id, ModelMap model, @PathVariable String course_id){
+    public ModelAndView editLecture(@PathVariable("lecture_id") String lecture_id, ModelMap model, @PathVariable String course_id) {
         model.addAttribute("lectureInfo", LectureRepo.findLecture(Integer.parseInt(lecture_id)));
         return new ModelAndView("lectureEdit", "lectureForm", new Form());
     }
 
     @PostMapping("/ID{lecture_id}/edit")
-    public ModelAndView editLectureHandle(Form form, Model model,@PathVariable("course_id") String course_id, @PathVariable("lecture_id") String lecture_id){
-        LectureRepo.editLecture(form.getLecture_num(),form.getTitle(), Integer.parseInt(lecture_id));
+    public ModelAndView editLectureHandle(Form form, Model model, @PathVariable("course_id") String course_id, @PathVariable("lecture_id") String lecture_id) {
+        LectureRepo.editLecture(form.getLecture_num(), form.getTitle(), Integer.parseInt(lecture_id));
         LectureRepo.addAttachment(form.getAttachments(), Integer.parseInt(lecture_id));
         model.addAttribute("lectureInfo", LectureRepo.findLecture(Integer.parseInt(lecture_id)));
         return new ModelAndView("lectureEdit", "lectureForm", new Form());
@@ -167,7 +166,7 @@ public class lectureController {
     @GetMapping("/ID{lecture_id}/delete/attachment/{attachment_id}")
     public View deleteAttachment(@PathVariable("attachment_id") String attachment_id, @PathVariable("lecture_id") String lecture_id, @PathVariable String course_id) {
         LectureRepo.deleteAttachment(Integer.parseInt(attachment_id));
-        return new RedirectView("/course/"+course_id+"/ID"+lecture_id+"/edit", true);
+        return new RedirectView("/course/" + course_id + "/ID" + lecture_id + "/edit", true);
     }
 
     @GetMapping("/delete/ID{lecture_id}")
@@ -183,7 +182,7 @@ public class lectureController {
 
     @PostMapping("/addPoll")
     public ModelAndView addPollHandle(@PathVariable String course_id, pollForm pollForm) {
-        Poll p = new Poll(pollForm.getQuestion(),course_id.toUpperCase(),pollForm.getAns_a(),pollForm.getAns_b(),pollForm.getAns_c(),pollForm.getAns_d());
+        Poll p = new Poll(pollForm.getQuestion(), course_id.toUpperCase(), pollForm.getAns_a(), pollForm.getAns_b(), pollForm.getAns_c(), pollForm.getAns_d());
         PollRepo.addPoll(p);
         return new ModelAndView("redirect:/index?addSuccessful");
     }

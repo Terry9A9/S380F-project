@@ -13,9 +13,10 @@ public class Lecture implements Serializable {
     private final Map<String, Attachment> attachments = new HashMap<>();
     private String course_code;
 
-    public Lecture(){}
+    public Lecture() {
+    }
 
-    public Lecture(String  lecture_num, String title, String course_code){
+    public Lecture(String lecture_num, String title, String course_code) {
         this.lecture_num = lecture_num;
         this.title = title;
         this.course_code = course_code;

@@ -65,7 +65,7 @@ public class LectureRepositoryImpI implements LectureRepository {
     public List<Lecture> findLecture(int lecture_id) {
         final String SQL_SELECT_Lecture_BY_ID
                 = "select l.*, a.* from LECTURE_INFO as l left join COURSE_MATERIAL a on l.LECTURE_ID = a.LECTURE_ID where l.LECTURE_ID = ?";
-        return jdbcOp.query(SQL_SELECT_Lecture_BY_ID, new LectureExtractor(),lecture_id);
+        return jdbcOp.query(SQL_SELECT_Lecture_BY_ID, new LectureExtractor(), lecture_id);
     }
 
     @Override
@@ -111,9 +111,9 @@ public class LectureRepositoryImpI implements LectureRepository {
                             new Object[]{filePart.getOriginalFilename(),
                                     filePart.getContentType(),
                                     new SqlLobValue(filePart.getInputStream(),
-                                            (int)filePart.getSize()),
+                                            (int) filePart.getSize()),
                                     lecture_id},
-                            new int[]{Types.VARCHAR, Types.VARCHAR,Types.BLOB, Types.INTEGER}
+                            new int[]{Types.VARCHAR, Types.VARCHAR, Types.BLOB, Types.INTEGER}
                     );
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -124,16 +124,17 @@ public class LectureRepositoryImpI implements LectureRepository {
 
     public static final String SQL_UPDATE_LECTURE
             = "update LECTURE_INFO set LECTURE_NUM=?, TITLE=? where LECTURE_ID=?";
+
     @Override
-    public void editLecture(String lecture_num, String title, int oldLecture_id){
-        jdbcOp.update(SQL_UPDATE_LECTURE,lecture_num, title,oldLecture_id);
+    public void editLecture(String lecture_num, String title, int oldLecture_id) {
+        jdbcOp.update(SQL_UPDATE_LECTURE, lecture_num, title, oldLecture_id);
     }
 
     public static final String SQL_INSERT_ATTACHMENT
             = "insert into COURSE_MATERIAL (filename,content_type,content,LECTURE_ID) values (?,?,?,?)";
 
     @Override
-    public void addAttachment(List<MultipartFile> attachments,int lecture_id){
+    public void addAttachment(List<MultipartFile> attachments, int lecture_id) {
         for (MultipartFile filePart : attachments) {
             if (filePart.getOriginalFilename() != null && filePart.getSize() > 0) {
                 try {
@@ -141,9 +142,9 @@ public class LectureRepositoryImpI implements LectureRepository {
                             new Object[]{filePart.getOriginalFilename(),
                                     filePart.getContentType(),
                                     new SqlLobValue(filePart.getInputStream(),
-                                            (int)filePart.getSize()),
+                                            (int) filePart.getSize()),
                                     lecture_id},
-                            new int[]{Types.VARCHAR, Types.VARCHAR,Types.BLOB, Types.INTEGER}
+                            new int[]{Types.VARCHAR, Types.VARCHAR, Types.BLOB, Types.INTEGER}
                     );
                 } catch (Exception e) {
                     e.printStackTrace();

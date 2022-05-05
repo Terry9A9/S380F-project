@@ -7,13 +7,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface LectureRepository {
-    public void addLecture(Lecture lecture,List<MultipartFile> attachments) ;
+    public void addLecture(Lecture lecture, List<MultipartFile> attachments);
 
     public List<Lecture> findLecture(int lecture_id);
 
     public void deleteAttachment(int attachment_id);
 
-    public void addAttachment(List<MultipartFile> attachments,int lecture_id);
+    public void addAttachment(List<MultipartFile> attachments, int lecture_id);
 
     public void editLecture(String lecture_num, String title, int oldLecture_id);
 

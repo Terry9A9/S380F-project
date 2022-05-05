@@ -20,17 +20,17 @@
         <input type="submit" value="Edit"/>
     </form>
 </security:authorize>
-    <h1>Lecture ${lectureInfo[0].lecture_num}</h1>
-    <h2>Lecture Title: ${lectureInfo[0].title}</h2><br />
-        <b>Course Material:</b><br/>
-        <ul>
-            <c:forEach items="${lectureInfo[0].attachments}" var="attachment">
-                <li>
-                    <c:out value="${attachment.name}" />
-                    [<a href="<c:url value="/course/${lectureInfo[0].course_code}/ID${lectureInfo[0].id}/attachment/${attachment.id}" />">Download</a>]
-                </li>
-            </c:forEach>
-        </ul>
+<h1>Lecture ${lectureInfo[0].lecture_num}</h1>
+<h2>Lecture Title: ${lectureInfo[0].title}</h2><br/>
+<b>Course Material:</b><br/>
+<ul>
+    <c:forEach items="${lectureInfo[0].attachments}" var="attachment">
+        <li>
+            <c:out value="${attachment.name}"/>
+            [<a href="<c:url value="/course/${lectureInfo[0].course_code}/ID${lectureInfo[0].id}/attachment/${attachment.id}" />">Download</a>]
+        </li>
+    </c:forEach>
+</ul>
 
 </body>
 </html>

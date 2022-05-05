@@ -1,9 +1,6 @@
 package hkmu.comps380f.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class WebUser implements Serializable {
 
@@ -14,15 +11,16 @@ public class WebUser implements Serializable {
     private String address;
     private String role;
 
-    public WebUser(){}
+    public WebUser() {
+    }
 
     public WebUser(String username, String password, String fullName,
-                    String phoneNumber, String address, String role){
+                   String phoneNumber, String address, String role) {
         this.username = username;
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
         this.address = address;
-        this.password = "{noop}"+password;
+        this.password = "{noop}" + password;
         this.role = role;
     }
 
