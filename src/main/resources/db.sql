@@ -68,10 +68,8 @@ CREATE TABLE user_choice
     choice_id   INTEGER     NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     user_name   VARCHAR(50) NOT NULL,
     user_choice VARCHAR(1)  NOT NULL,
-    course_code VARCHAR(10) NOT NULL,
     poll_id     int         NOT NULL,
     PRIMARY KEY (choice_id),
-    FOREIGN KEY (course_code) REFERENCES course_info (course_code) ON DELETE CASCADE,
     FOREIGN KEY (user_name) REFERENCES USER_INFO (user_name) ON DELETE CASCADE,
     FOREIGN KEY (poll_id) REFERENCES poll (poll_id) ON DELETE CASCADE
 );

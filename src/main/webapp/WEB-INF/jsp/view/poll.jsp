@@ -20,38 +20,50 @@
         <input type="submit" value="log in"/>
     </form>
 </security:authorize>
-<h1>poll</h1>
+<h1>Poll</h1>
 <security:authorize access="hasRole('ADMIN')">
 
 </security:authorize>
 
 
 <security:authorize access="hasRole('ADMIN')">
-    <h1>${poll.question}</h1>
-    <form:form method="post" modelAttribute="poll_choice">
+    <h1>Question: ${poll.question}</h1>
+    <form:form method="post" modelAttribute="poll_choice" action="">
 
         <c:if test="${not empty poll.ans_a}">
             <form:label path="user_choice">${poll.ans_a} </form:label>
-            <form:radiobutton path="user_choice" value="ans_a" checked="${Choose_a}"/>
-            Vote count: ${findChoice_a}/${findChoice_a+findChoice_b+findChoice_c+findChoice_d}<br/>
+            <form:radiobutton path="user_choice" value="a" checked="${Choose_a}"/>
+            <c:if test="${not empty checked}">
+                Vote count: ${findChoice_a}/${findChoice_a+findChoice_b+findChoice_c+findChoice_d}
+            </c:if>
+            <br/>
         </c:if>
 
         <c:if test="${not empty poll.ans_b}">
             <form:label path="user_choice">${poll.ans_b} </form:label>
-            <form:radiobutton path="user_choice" value="ans_b" checked="${Choose_b}"/>
-            Vote count: ${findChoice_b}/${findChoice_a+findChoice_b+findChoice_c+findChoice_d}<br/>
+            <form:radiobutton path="user_choice" value="b" checked="${Choose_b}"/>
+            <c:if test="${not empty checked}">
+                Vote count: ${findChoice_b}/${findChoice_a+findChoice_b+findChoice_c+findChoice_d}
+            </c:if>
+            <br/>
         </c:if>
 
         <c:if test="${not empty poll.ans_c}">
             <form:label path="user_choice">${poll.ans_c} </form:label>
-            <form:radiobutton path="user_choice" value="ans_c" checked="${Choose_c}"/>
-            Vote count: ${findChoice_c}/${findChoice_a+findChoice_b+findChoice_c+findChoice_d}<br/>
+            <form:radiobutton path="user_choice" value="c" checked="${Choose_c}"/>
+            <c:if test="${not empty checked}">
+                Vote count: ${findChoice_c}/${findChoice_a+findChoice_b+findChoice_c+findChoice_d}
+            </c:if>
+            <br/>
         </c:if>
 
         <c:if test="${not empty poll.ans_d}">
             <form:label path="user_choice">${poll.ans_d} </form:label>
-            <form:radiobutton path="user_choice" value="ans_d" checked="${Choose_d}"/>
-            Vote count: ${findChoice_d}/${findChoice_a+findChoice_b+findChoice_c+findChoice_d}<br/>
+            <form:radiobutton path="user_choice" value="d" checked="${Choose_d}"/>
+            <c:if test="${not empty checked}">
+                Vote count: ${findChoice_d}/${findChoice_a+findChoice_b+findChoice_c+findChoice_d}
+            </c:if>
+            <br/>
         </c:if>
 
         <br/>

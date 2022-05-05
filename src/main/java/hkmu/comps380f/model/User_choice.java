@@ -32,14 +32,6 @@ public User_choice(){}
         this.user_choice = user_choice;
     }
 
-    public String getCourse_code() {
-        return course_code;
-    }
-
-    public void setCourse_code(String course_code) {
-        this.course_code = course_code;
-    }
-
     public String getPoll_id() {
         return poll_id;
     }
@@ -50,7 +42,6 @@ public User_choice(){}
     private int choice_id;
     private String user_name;
     private String user_choice;
-    private String course_code;
     private String poll_id;
 
     

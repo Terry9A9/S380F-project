@@ -71,25 +71,6 @@ public class PollRepositoryImpI implements PollRepository {
         }
     }
 
-    final String SQL_FIND_Choice
-            = "select Count(*) from User_choice where poll_id = ? and user_choice =?";
-
-    public Object findChoice_a(int poll_id) {
-        return jdbcOp.query(SQL_FIND_Choice, new ChoiceExtractor1(), poll_id, "a");
-    }
-
-    public int findChoice_b(int poll_id) {
-        return (int) jdbcOp.query(SQL_FIND_Choice, new ChoiceExtractor1(), poll_id, "b");
-    }
-
-    public int findChoice_c(int poll_id) {
-        return (int) jdbcOp.query(SQL_FIND_Choice, new ChoiceExtractor1(), poll_id, "c");
-    }
-
-    public int findChoice_d(int poll_id) {
-        return (int) jdbcOp.query(SQL_FIND_Choice, new ChoiceExtractor1(), poll_id, "d");
-    }
-
     private static final class ChoiceExtractor implements ResultSetExtractor<User_choice> {
         @Override
         public User_choice extractData(ResultSet rs)
@@ -118,8 +99,40 @@ public class PollRepositoryImpI implements PollRepository {
         }
     }
 
-    @Nullable
+    final String SQL_FIND_Choice
+            = "select Count(*) from User_choice where poll_id = ? and user_choice =?";
+
+    public Object findChoice_a(int poll_id) {
+        return jdbcOp.query(SQL_FIND_Choice, new ChoiceExtractor1(), poll_id, "a");
+    }
+
+    public Object findChoice_b(int poll_id) {
+        return jdbcOp.query(SQL_FIND_Choice, new ChoiceExtractor1(), poll_id, "b");
+    }
+
+    public Object findChoice_c(int poll_id) {
+        return jdbcOp.query(SQL_FIND_Choice, new ChoiceExtractor1(), poll_id, "c");
+    }
+
+    public Object findChoice_d(int poll_id) {
+        return  jdbcOp.query(SQL_FIND_Choice, new ChoiceExtractor1(), poll_id, "d");
+    }
+
     public User_choice findUser(int poll_id, String name) {
-        return jdbcOp.query("select user_name, User_choice from User_choice where user_name = ? and POLL_ID= ?", new ChoiceExtractor(), name,poll_id);
+        return jdbcOp.query("select User_choice, CHOICE_ID from User_choice where user_name = ? and POLL_ID= ?", new ChoiceExtractor(), name,poll_id);
+    }
+
+    @Override
+    public void addUser_choice(String User_name,String User_choice,int poll_id) {
+        final String SQL_INSERT_User_choice
+                = "insert into User_choice (user_name, user_choice, poll_id) values (?, ?, ?)";
+        jdbcOp.update(SQL_INSERT_User_choice, User_name,User_choice,poll_id);
+    }
+
+    @Override
+    public void editUser_choice(String User_name,String User_choice,int poll_id) {
+        final String SQL_UPDATE_User_choice
+                = "update User_choice SET user_choice=? where user_name=? and poll_id=?";
+        jdbcOp.update(SQL_UPDATE_User_choice,User_choice, User_name,poll_id);
     }
 }

@@ -45,19 +45,19 @@ VALUES ('idk', 1, 't');
 ----------------------POLL-------------------------
 
 INSERT INTO POLL (POLL_QUESTION, COURSE_CODE, ANS_A, ANS_B, ANS_C, ANS_D)
-VALUES ('is 380 good?', 'COMPS380F', 'Yes', 'NO', DEFAULT, DEFAULT);
+VALUES ('Which date do you prefer for the mid-term test?', 'COMPS380F', '7/5', '8/5', DEFAULT, DEFAULT);
 
 INSERT INTO POLL (POLL_QUESTION, COURSE_CODE, ANS_A, ANS_B, ANS_C, ANS_D)
-VALUES ('is 313 good?', 'COMPS313F', 'Yes', 'NO', 'cant tell', 'idk');
+VALUES ('Which date do you prefer for the mid-term test?', 'COMPS313F', '9/5', '10/5', '11/5', '12/5');
 
 ----------------------USER_CHOICE-------------------------
 
-INSERT INTO USER_CHOICE (USER_NAME, USER_CHOICE, COURSE_CODE, POLL_ID)
-VALUES ('t', 'a', 'COMPS380F', 1);
-INSERT INTO USER_CHOICE (USER_NAME, USER_CHOICE, COURSE_CODE, POLL_ID)
-VALUES ('john', 'b', 'COMPS380F', 1);
-INSERT INTO USER_CHOICE (USER_NAME, USER_CHOICE, COURSE_CODE, POLL_ID)
-VALUES ('john', 'd', 'COMPS380F', 2);
+INSERT INTO USER_CHOICE (USER_NAME, USER_CHOICE, POLL_ID)
+VALUES ('t', 'a',  1);
+INSERT INTO USER_CHOICE (USER_NAME, USER_CHOICE, POLL_ID)
+VALUES ('john', 'b',  1);
+INSERT INTO USER_CHOICE (USER_NAME, USER_CHOICE, POLL_ID)
+VALUES ('john', 'd', 2);
 
 ----------------------POLL_COMMENTS-------------------------
 

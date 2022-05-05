@@ -1,5 +1,6 @@
 package hkmu.comps380f.controller;
 
+import org.apache.derby.shared.common.error.DerbySQLIntegrityConstraintViolationException;
 import org.springframework.security.core.Authentication;
 import hkmu.comps380f.dao.CourseRepository;
 import hkmu.comps380f.dao.LectureRepository;
@@ -64,18 +65,9 @@ public class IndexController {
     }
 
     @PostMapping("/addCourse")
-    public ModelAndView addCourseHandle(Form form, Model model) {
+    public ModelAndView addCourseHandle(Form form, Model model) throws DerbySQLIntegrityConstraintViolationException {
         boolean success = true;
-        try{
-            CourseRepo.addCourse(form.getCourse_code(), form.getCourse_name());
-        }catch (Exception DerbySQLIntegrityConstraintViolationException){
-            success = false;
-        }
-        if (success){
-            return new ModelAndView("redirect:/index?addSuccessful");
-        }else{
-            model.addAttribute("error", "Course already exists");
-            return new ModelAndView("addCourse","Course", new Form());
-        }
+        CourseRepo.addCourse(form.getCourse_code(), form.getCourse_name());
+        return new ModelAndView("redirect:/index?addSuccessful");
     }
 }

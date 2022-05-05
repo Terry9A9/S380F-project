@@ -20,6 +20,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/course/{course_id}")
@@ -182,7 +183,7 @@ public class lectureController {
 
     @PostMapping("/addPoll")
     public ModelAndView addPollHandle(@PathVariable String course_id, pollForm pollForm) {
-        Poll p = new Poll(pollForm.getQuestion(),course_id,pollForm.getAns_a(),pollForm.getAns_b(),pollForm.getAns_c(),pollForm.getAns_d());
+        Poll p = new Poll(pollForm.getQuestion(),course_id.toUpperCase(),pollForm.getAns_a(),pollForm.getAns_b(),pollForm.getAns_c(),pollForm.getAns_d());
         PollRepo.addPoll(p);
         return new ModelAndView("redirect:/index?addSuccessful");
     }
