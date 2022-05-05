@@ -12,7 +12,8 @@ public class Poll implements Serializable{
         this.ans_c = ans_c;
         this.ans_d = ans_d;
     }
-    private int id;
+
+    private int poll_id;
     private String question;
     private String course_code;
     private String ans_a;
@@ -22,11 +23,11 @@ public class Poll implements Serializable{
     public Poll(){}
 
     public int getId() {
-        return id;
+        return poll_id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setPoll_id(int id) {
+        this.poll_id = id;
     }
 
     public String getQuestion() {

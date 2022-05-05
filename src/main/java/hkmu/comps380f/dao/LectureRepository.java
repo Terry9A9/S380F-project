@@ -22,4 +22,6 @@ public interface LectureRepository {
     public List<Lecture> findAll();
 
     public void deleteLecture(int lecture_id);
+
+    public void deleteComment(int lecture_id);
 }

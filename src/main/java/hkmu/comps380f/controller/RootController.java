@@ -41,7 +41,6 @@ public class RootController {
         return new ModelAndView("login");
     }
 
-
     @GetMapping("/favicon.ico")
     public View faviconBug() {
         return new RedirectView("/index", true);

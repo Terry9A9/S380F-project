@@ -60,9 +60,7 @@ public class IndexController {
 
     @GetMapping("/addCourse")
     public ModelAndView addCourse() {
-        Authentication authentication = null;
-        System.out.println(authentication.getName());
-        return new ModelAndView("addCourse", "Course", new IndexController.Form());
+        return new ModelAndView("addCourse", "Course", new Form());
     }
 
     @PostMapping("/addCourse")
@@ -77,7 +75,7 @@ public class IndexController {
             return new ModelAndView("redirect:/index?addSuccessful");
         }else{
             model.addAttribute("error", "Course already exists");
-            return new ModelAndView("addCourse","Course", new IndexController.Form());
+            return new ModelAndView("addCourse","Course", new Form());
         }
     }
 }

@@ -166,6 +166,13 @@ public class LectureRepositoryImpI implements LectureRepository {
         jdbcOp.update(SQL_DELETE_ATTACHMENT, attachment_id);
     }
 
+    @Override
+    public void deleteComment(int comment_id) {
+        final String SQL_DELETE_Comment
+                = "delete from LECTURE_COMMENTS where COMMENTS_ID=?";
+        jdbcOp.update(SQL_DELETE_Comment, comment_id);
+    }
+
     private static final class AttachmentRowMapper implements RowMapper<Attachment> {
 
         @Override

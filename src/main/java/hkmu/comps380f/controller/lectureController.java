@@ -187,9 +187,22 @@ public class lectureController {
         return new ModelAndView("redirect:/index?addSuccessful");
     }
 
-    @GetMapping("/delete/Poll{poll_id}")
+    @GetMapping("/delete/poll{poll_id}")
     public View deletePoll(@PathVariable("poll_id") String poll_id) {
         PollRepo.delete(Integer.parseInt(poll_id));
         return new RedirectView("/index?successful", true);
     }
+
+    @GetMapping("/delete/pollComment/{comment_id}")
+    public View deletePollComment(@PathVariable("comment_id") String comment_id) {
+        PollRepo.deleteComment(Integer.parseInt(comment_id));
+        return new RedirectView("/index?successful", true);
+    }
+
+    @GetMapping("/ID{lecture_id}/delete/lectureComment/{comment_id}")
+    public View deleteLectureComment(@PathVariable("comment_id") String comment_id) {
+        LectureRepo.deleteComment(Integer.parseInt(comment_id));
+        return new RedirectView("/index?successful", true);
+    }
+
 }
