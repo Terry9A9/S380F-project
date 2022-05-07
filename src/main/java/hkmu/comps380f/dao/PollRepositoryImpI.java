@@ -13,6 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 public class PollRepositoryImpI implements PollRepository {
@@ -98,6 +102,29 @@ public class PollRepositoryImpI implements PollRepository {
         }
     }
 
+
+    private static final class HExtractor implements ResultSetExtractor<List<User_choice>> {
+
+        @Override
+        public List<User_choice> extractData(ResultSet rs) throws SQLException, DataAccessException {
+            Map<Integer, User_choice> map = new HashMap<>();
+            while (rs.next()) {
+                Integer id = rs.getInt("Choice_id");
+                User_choice User_choice = map.get(id);
+                if (User_choice == null) {
+                    User_choice = new User_choice();
+                    User_choice.setChoice_id(id);
+                    User_choice.setUser_name(rs.getString("User_name"));
+                    User_choice.setUser_choice(rs.getString("User_choice"));
+                    User_choice.setPoll_id(rs.getInt("Poll_id"));
+                    map.put(id, User_choice);
+                }
+
+            }
+            return new ArrayList<>(map.values());
+        }
+    }
+
     final String SQL_FIND_Choice
             = "select Count(*) from User_choice where poll_id = ? and user_choice =?";
 
@@ -119,6 +146,11 @@ public class PollRepositoryImpI implements PollRepository {
 
     public User_choice findUser(int poll_id, String name) {
         return jdbcOp.query("select User_choice, CHOICE_ID from User_choice where user_name = ? and POLL_ID= ?", new ChoiceExtractor(), name, poll_id);
+    }
+
+    @Override
+    public List<User_choice> findH(String name) {
+        return jdbcOp.query("select * from User_choice where user_name = ?", new HExtractor(), name);
     }
 
     @Override

@@ -2,8 +2,10 @@ package hkmu.comps380f.controller;
 
 import hkmu.comps380f.dao.CourseRepository;
 import hkmu.comps380f.dao.LectureRepository;
+import hkmu.comps380f.dao.PollRepository;
 import hkmu.comps380f.dao.UserRepository;
 import org.apache.derby.shared.common.error.DerbySQLIntegrityConstraintViolationException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -24,6 +26,8 @@ public class IndexController {
     private LectureRepository LectureRepo;
     @Resource
     private CourseRepository CourseRepo;
+    @Resource
+    private PollRepository PollRepo;
 
     public static class Form {
 
@@ -65,5 +69,12 @@ public class IndexController {
         boolean success = true;
         CourseRepo.addCourse(form.getCourse_code(), form.getCourse_name());
         return new ModelAndView("redirect:/index?addSuccessful");
+    }
+
+    @GetMapping("/pHistory")
+    public String pollHistory(ModelMap model, Authentication authentication) {
+        model.addAttribute("H", PollRepo.findH(authentication.getName()));
+        System.out.print(PollRepo.findH(authentication.getName()).get(0).getUser_name()+"adsflpknjasdgpfoijsadmiokgsnadfigunsafdiuognfsdaoiugnsadiufogn");
+        return "pollHistory";
     }
 }

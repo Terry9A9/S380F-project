@@ -1,12 +1,8 @@
-<%--
-  Created by IntelliJ IDEA.
-  WebUser: Terry
-  Date: 10/4/2022
-  Time: 12:09 AM
-  To change this template use File | Settings | File Templates.
---%>
+<%-- Created by IntelliJ IDEA. WebUser: Terry Date: 10/4/2022 Time: 12:09 AM To change this template use File | Settings
+    | File Templates. --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
+
 <head>
     <title>Online Course Website</title>
     <style>
@@ -32,7 +28,8 @@
             color: #fff;
         }
 
-        .user_table th, .user_table td {
+        .user_table th,
+        .user_table td {
             padding: 5px;
             text-align: left;
             width: 150px;
@@ -64,9 +61,9 @@
             padding: 5px;
             text-align: left;
         }
-
     </style>
 </head>
+
 <body>
 <security:authorize access="isAuthenticated()">
     <c:url var="logoutUrl" value="/logout"/>
@@ -114,13 +111,14 @@
                     <tbody>
                     <c:forEach items="${Users}" var="user">
                         <tr>
-                            <td><a href="<c:url value="/user/edit/${user.username}"/>"> ${user.username}</a></td>
+                            <td><a href="<c:url value=" /user/edit/${user.username}" />">
+                                    ${user.username}</a></td>
                             <td>${user.password}</td>
                             <td>${user.fullName}</td>
                             <td>${user.address}</td>
                             <td>${user.role}</td>
                             <td>
-                                [<a href="<c:url value="/user/delete/${user.username}" />">Delete</a>]
+                                [<a href="<c:url value=" /user/delete/${user.username}" />">Delete</a>]
                             </td>
                         </tr>
                     </c:forEach>
@@ -168,11 +166,15 @@
                         <c:if test="${lecture.course_code == course.course_code}">
                             <tr>
                                 <td>${lecture.lecture_num}</td>
-                                <td><a href="/course/${course.course_code}/ID${lecture.id}">${lecture.title}</a></td>
+                                <td><a
+                                        href="/course/${course.course_code}/ID${lecture.id}">${lecture.title}</a>
+                                </td>
                                 <security:authorize access="hasRole('ADMIN')">
                                     <td>
-                                        <a href="/course/${course.course_code}/delete/ID${lecture.id}">[Delete]</a>
-                                        <a href="/course/${course.course_code}/ID${lecture.id}/edit">[Edit]</a>
+                                        <a
+                                                href="/course/${course.course_code}/delete/ID${lecture.id}">[Delete]</a>
+                                        <a
+                                                href="/course/${course.course_code}/ID${lecture.id}/edit">[Edit]</a>
                                     </td>
                                 </security:authorize>
 
@@ -188,9 +190,16 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>Question1</td>
-                    </tr>
+                    <c:forEach items="${PollQuestion}" var="q">
+                        <tr>${q.course_code}</tr>
+                        <c:if test="${course.course_code == q.course_code}">
+                            <tr>
+                                <td>
+                                    Question: <a href="/poll${q.poll_id}">${q.poll_question}></a>
+                                </td>
+                            </tr>
+                        </c:if>
+                    </c:forEach>
                     </tbody>
                 </table>
             </div>
@@ -199,4 +208,5 @@
 </c:choose>
 
 </body>
+
 </html>

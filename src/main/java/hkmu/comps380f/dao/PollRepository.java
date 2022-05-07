@@ -3,6 +3,8 @@ package hkmu.comps380f.dao;
 import hkmu.comps380f.model.Poll;
 import hkmu.comps380f.model.User_choice;
 
+import java.util.List;
+
 public interface PollRepository {
 
     public void addPoll(Poll poll);
@@ -26,4 +28,6 @@ public interface PollRepository {
     public Object findChoice_d(int poll_id);
 
     public User_choice findUser(int poll_id, String name);
+
+    public List<User_choice> findH(String name);
 }

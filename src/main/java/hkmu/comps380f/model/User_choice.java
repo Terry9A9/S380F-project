@@ -34,18 +34,18 @@ public class User_choice implements Serializable {
         this.user_choice = user_choice;
     }
 
-    public String getPoll_id() {
+    public int getPoll_id() {
         return poll_id;
     }
 
-    public void setPoll_id(String poll_id) {
+    public void setPoll_id(int poll_id) {
         this.poll_id = poll_id;
     }
 
     private int choice_id;
     private String user_name;
     private String user_choice;
-    private String poll_id;
+    private int poll_id;
 
 
 }
