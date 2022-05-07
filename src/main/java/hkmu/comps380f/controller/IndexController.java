@@ -56,7 +56,8 @@ public class IndexController {
         model.addAttribute("Users", UserRepo.findAll());
         model.addAttribute("Lectures", LectureRepo.findAll());
         model.addAttribute("Courses", CourseRepo.findAll());
-        return "indexLecturers";
+        model.addAttribute("PollQuestion", CourseRepo.findPollQuestion());
+        return "index";
     }
 
     @GetMapping("/addCourse")
@@ -71,10 +72,15 @@ public class IndexController {
         return new ModelAndView("redirect:/index?addSuccessful");
     }
 
-    @GetMapping("/pHistory")
+    @GetMapping("/pollHistory")
     public String pollHistory(ModelMap model, Authentication authentication) {
         model.addAttribute("H", PollRepo.findH(authentication.getName()));
-        System.out.print(PollRepo.findH(authentication.getName()).get(0).getUser_name()+"adsflpknjasdgpfoijsadmiokgsnadfigunsafdiuognfsdaoiugnsadiufogn");
         return "pollHistory";
+    }
+
+    @GetMapping("/commentHistory")
+    public String commentHistory(ModelMap model, Authentication authentication) {
+        model.addAttribute("cH", LectureRepo.findH(authentication.getName()));
+        return "commentHistory";
     }
 }

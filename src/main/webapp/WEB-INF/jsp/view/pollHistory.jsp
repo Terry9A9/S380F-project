@@ -10,27 +10,38 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>JSP Page</title>
+    <title>Poll History</title>
 </head>
 <body>
-<security:authorize access="isAuthenticated()">
-    <c:url var="logoutUrl" value="/logout"/>
-    <form action="${logoutUrl}" method="post">
-        <input type="submit" value="Log out"/>
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-    </form>
-</security:authorize>
+<form action="/" method="get">
+    <input type="submit" value="Home"/>
+</form>
 
-<security:authorize access="isAnonymous()">
-    <c:url var="loginUrl" value="/login"/>
-    <form action="${loginUrl}" method="get">
-        <input type="submit" value="log in"/>
-    </form>
-</security:authorize>
 <h1>Poll History</h1>
 <c:forEach items="${H}" var="a">
+    <c:url var="url" value="/poll${a.poll_id}">${a.question}"></c:url>
     <li>
-        Poll ${a.poll_id} You choice ${a.user_choice}
+        <c:choose>
+            <c:when test="${a.user_choice == 'a'}">
+                (${a.course_code}) Poll Q: <a href="${url}">${a.question}</a>
+                You choose (${a.user_choice}) ${a.ans_a}
+            </c:when>
+
+            <c:when test="${a.user_choice == 'b'}">
+                (${a.course_code}) Poll Q: <a href="${url}">${a.question}</a>
+                You choose (${a.user_choice}) ${a.ans_b}
+            </c:when>
+
+            <c:when test="${a.user_choice == 'c'}">
+                (${a.course_code}) Poll Q: <a href="${url}">${a.question}</a>
+                You choose (${a.user_choice}) ${a.ans_c}
+            </c:when>
+
+            <c:when test="${a.user_choice    == 'd'}">
+                (${a.course_code}) Poll Q: <a href="${url}">${a.question}</a>
+                You choose (${a.user_choice}) ${a.ans_d}
+            </c:when>
+        </c:choose>
     </li>
 </c:forEach>
 

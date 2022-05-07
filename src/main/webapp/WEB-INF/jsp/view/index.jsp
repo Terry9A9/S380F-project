@@ -71,6 +71,12 @@
         <input type="submit" value="Log out"/>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </form>
+    <form action="/index/pollHistory" method="get">
+        <input type="submit" value="My Poll History"/>
+    </form>
+    <form action="/index/commentHistory" method="get">
+        <input type="submit" value="My Comment History"/>
+    </form>
 </security:authorize>
 
 <security:authorize access="isAnonymous()">
@@ -166,15 +172,12 @@
                         <c:if test="${lecture.course_code == course.course_code}">
                             <tr>
                                 <td>${lecture.lecture_num}</td>
-                                <td><a
-                                        href="/course/${course.course_code}/ID${lecture.id}">${lecture.title}</a>
+                                <td><a href="/course/${course.course_code}/ID${lecture.id}">${lecture.title}</a>
                                 </td>
                                 <security:authorize access="hasRole('ADMIN')">
                                     <td>
-                                        <a
-                                                href="/course/${course.course_code}/delete/ID${lecture.id}">[Delete]</a>
-                                        <a
-                                                href="/course/${course.course_code}/ID${lecture.id}/edit">[Edit]</a>
+                                        <a href="/course/${course.course_code}/delete/ID${lecture.id}">[Delete]</a>
+                                        <a href="/course/${course.course_code}/ID${lecture.id}/edit">[Edit]</a>
                                     </td>
                                 </security:authorize>
 
@@ -190,12 +193,11 @@
                     </tr>
                     </thead>
                     <tbody>
+
                     <c:forEach items="${PollQuestion}" var="q">
-                        <tr>${q.course_code}</tr>
                         <c:if test="${course.course_code == q.course_code}">
                             <tr>
-                                <td>
-                                    Question: <a href="/poll${q.poll_id}">${q.poll_question}></a>
+                                <td>Question: <a href="/poll${q.poll_id}">${q.poll_question}</a>
                                 </td>
                             </tr>
                         </c:if>

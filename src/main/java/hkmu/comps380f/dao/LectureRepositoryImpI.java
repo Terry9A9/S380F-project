@@ -2,6 +2,8 @@ package hkmu.comps380f.dao;
 
 import hkmu.comps380f.model.Attachment;
 import hkmu.comps380f.model.Lecture;
+import hkmu.comps380f.model.LectureComment;
+import hkmu.comps380f.model.User_choice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.*;
@@ -27,6 +29,26 @@ public class LectureRepositoryImpI implements LectureRepository {
     @Autowired
     public LectureRepositoryImpI(DataSource dataSource) {
         this.jdbcOp = new JdbcTemplate(dataSource);
+    }
+
+    private static final class LectureCommentExtractor implements ResultSetExtractor<List<LectureComment>> {
+
+        @Override
+        public List<LectureComment> extractData(ResultSet rs) throws SQLException, DataAccessException {
+            Map<Integer, LectureComment> map = new HashMap<>();
+            while (rs.next()) {
+                Integer id = rs.getInt("comments_id");
+                LectureComment Lecture = map.get(id);
+                if (Lecture == null) {
+                    Lecture = new LectureComment();
+                    Lecture.setComment(rs.getString("comments"));
+                    Lecture.setCommentId(id);
+                    Lecture.setUser_name(rs.getString("user_name"));
+                    map.put(id, Lecture);
+                }
+            }
+            return new ArrayList<>(map.values());
+        }
     }
 
     private static final class LectureExtractor implements ResultSetExtractor<List<Lecture>> {
@@ -58,6 +80,24 @@ public class LectureRepositoryImpI implements LectureRepository {
             }
             return new ArrayList<>(map.values());
         }
+    }
+
+    private static final String SQL_INSERT_COMMENT
+            = "insert into LECTURE_COMMENTS (COMMENTS, LECTURE_ID, USER_NAME) values (?, ?, ?)";
+
+
+    @Override
+    @Transactional
+    public void addLectureComment(final LectureComment comment) {
+        jdbcOp.update(SQL_INSERT_COMMENT, comment.getComment(), comment.getLectureId(), comment.getUser_name());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<LectureComment> findLectureComment(int comment_id) {
+        final String SQL_SELECT_Comment_BY_ID
+                = "select * from LECTURE_COMMENTS where LECTURE_ID = ?";
+        return jdbcOp.query(SQL_SELECT_Comment_BY_ID, new LectureCommentExtractor(), comment_id);
     }
 
     @Override
@@ -172,6 +212,34 @@ public class LectureRepositoryImpI implements LectureRepository {
         final String SQL_DELETE_Comment
                 = "delete from LECTURE_COMMENTS where COMMENTS_ID=?";
         jdbcOp.update(SQL_DELETE_Comment, comment_id);
+    }
+
+    @Override
+    public List<LectureComment> findH(String name) {
+        return jdbcOp.query("select c.*, l.COURSE_CODE, l.TITLE, l.LECTURE_NUM from LECTURE_COMMENTS c, LECTURE_INFO l where c.LECTURE_ID = l.LECTURE_ID and USER_NAME = ?", new HExtractor(), name);
+    }
+
+    private static final class HExtractor implements ResultSetExtractor<List<LectureComment>> {
+
+        @Override
+        public List<LectureComment> extractData(ResultSet rs) throws SQLException, DataAccessException {
+            Map<Integer, LectureComment> map = new HashMap<>();
+            while (rs.next()) {
+                Integer id = rs.getInt("comments_id");
+                LectureComment lc = map.get(id);
+                if (lc == null) {
+                    lc = new LectureComment();
+                    lc.setLectureId(id);
+                    lc.setUser_name(rs.getString("User_name"));
+                    lc.setComment(rs.getString("comments"));
+                    lc.setTitle(rs.getString("title"));
+                    lc.setCourse_code(rs.getString("course_code"));
+                    lc.setLecture_num(rs.getString("lecture_num"));
+                    map.put(id, lc);
+                }
+            }
+            return new ArrayList<>(map.values());
+        }
     }
 
     private static final class AttachmentRowMapper implements RowMapper<Attachment> {

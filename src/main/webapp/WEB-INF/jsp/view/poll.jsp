@@ -3,16 +3,42 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>JSP Page</title>
+    <title>Poll</title>
+    <style>
+        .comment_table {
+            width: 100%;
+            table-layout: fixed;
+            border-collapse: collapse;
+        }
+
+        .comment_table tbody {
+            display: block;
+            width: 100%;
+            overflow: auto;
+            height: 100px;
+        }
+
+        .comment_table thead tr {
+            display: block;
+        }
+
+        .comment_table thead {
+            background: gray;
+            color: #fff;
+        }
+
+        .comment_table th,
+        .comment_table td {
+            padding: 5px;
+            text-align: left;
+            width: 150px;
+        }
+    </style>
 </head>
 <body>
-<security:authorize access="isAuthenticated()">
-    <c:url var="logoutUrl" value="/logout"/>
-    <form action="${logoutUrl}" method="post">
-        <input type="submit" value="Log out"/>
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-    </form>
-</security:authorize>
+<form action="/" method="get">
+    <input type="submit" value="Home"/>
+</form>
 
 <h1>Poll</h1>
 
@@ -58,5 +84,41 @@
         <br/>
         <input type="submit" name="Vote" value="Vote"/>
     </form:form>
+<br/><br/>
+    <c:url var="editUrl" value="/poll${poll.id}/comment/add"/>
+    <form action="${editUrl}" method="get" style="display: inline">
+        <input type="submit" value="Add comment"/>
+    </form>
+<h1>[Comment List]</h1>
+<table class="comment_table" style="display: inline-table;">
+    <thead>
+    <tr>
+        <th>Comment from:</th>
+        <th>Comment:</th>
+        <security:authorize access="hasRole('ADMIN')">
+            <th>Action</th>
+        </security:authorize>
+    </tr>
+    </thead>
+    <tbody>
+    <c:choose>
+        <c:when test="${fn:length(pollComments) == 0}">
+            <h2>There are no comments in the system.</h2>
+        </c:when>
+        <c:otherwise>
+            <c:forEach items="${pollComments}" var="comment">
+                <tr>
+                    <td>${comment.user_name}</td>
+                    <td>${comment.comment}</td>
+                    <security:authorize access="hasRole('ADMIN')">
+                        <td><a href="/poll${poll.id}/delete/pollComment/${comment.poll_cId}">[Delete]</a></td>
+                    </security:authorize>
+                </tr>
+            </c:forEach>
+        </c:otherwise>
+    </c:choose>
+    </tbody>
+</table>
+
 </body>
 </html>

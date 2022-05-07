@@ -4,8 +4,10 @@ import hkmu.comps380f.dao.LectureRepository;
 import hkmu.comps380f.dao.PollRepository;
 import hkmu.comps380f.model.Attachment;
 import hkmu.comps380f.model.Lecture;
+import hkmu.comps380f.model.LectureComment;
 import hkmu.comps380f.model.Poll;
 import hkmu.comps380f.view.DownloadView;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -110,22 +112,6 @@ public class lectureController {
         }
     }
 
-    @GetMapping("/ID{lecture_id}")
-    public String viewLecture(@PathVariable("lecture_id") String lecture_id, ModelMap model, @PathVariable String course_id) {
-        model.addAttribute("lectureInfo", LectureRepo.findLecture(Integer.parseInt(lecture_id)));
-        return "lectureView";
-    }
-
-    @GetMapping("/ID{lecture_id}/attachment/{attachment:.+}")
-    public View download(@PathVariable("attachment") int id) {
-        Attachment attachment = LectureRepo.getAttachment(id);
-        if (attachment != null) {
-            return new DownloadView(attachment.getName(),
-                    attachment.getMimeContentType(), attachment.getContents());
-        }
-        return new RedirectView("/index", true);
-    }
-
     @GetMapping("/add")
     public ModelAndView addLecture() {
         return new ModelAndView("lectureAdd", "lectureForm", new Form());
@@ -147,6 +133,23 @@ public class lectureController {
             model.addAttribute("error", "Lecture number already exists");
             return new ModelAndView("lectureAdd", "lectureForm", new Form());
         }
+    }
+
+    @GetMapping("/ID{lecture_id}")
+    public String viewLecture(@PathVariable("lecture_id") String lecture_id, ModelMap model, @PathVariable String course_id) {
+        model.addAttribute("lectureInfo", LectureRepo.findLecture(Integer.parseInt(lecture_id)));
+        model.addAttribute("lectureComments", LectureRepo.findLectureComment(Integer.parseInt(lecture_id)));
+        return "lectureView";
+    }
+
+    @GetMapping("/ID{lecture_id}/attachment/{attachment:.+}")
+    public View download(@PathVariable("attachment") int id) {
+        Attachment attachment = LectureRepo.getAttachment(id);
+        if (attachment != null) {
+            return new DownloadView(attachment.getName(),
+                    attachment.getMimeContentType(), attachment.getContents());
+        }
+        return new RedirectView("/index", true);
     }
 
     @GetMapping("/ID{lecture_id}/edit")
@@ -174,7 +177,6 @@ public class lectureController {
         LectureRepo.deleteLecture(Integer.parseInt(lecture_id));
         return new RedirectView("/index?successful", true);
     }
-
     @GetMapping("/addPoll")
     public ModelAndView addPoll(@PathVariable String course_id) {
         return new ModelAndView("pollAdd", "Poll", new pollForm());
@@ -187,22 +189,56 @@ public class lectureController {
         return new ModelAndView("redirect:/index?addSuccessful");
     }
 
-    @GetMapping("/delete/poll{poll_id}")
-    public View deletePoll(@PathVariable("poll_id") String poll_id) {
-        PollRepo.delete(Integer.parseInt(poll_id));
-        return new RedirectView("/index?successful", true);
-    }
-
-    @GetMapping("/delete/pollComment/{comment_id}")
-    public View deletePollComment(@PathVariable("comment_id") String comment_id) {
-        PollRepo.deleteComment(Integer.parseInt(comment_id));
-        return new RedirectView("/index?successful", true);
-    }
-
     @GetMapping("/ID{lecture_id}/delete/lectureComment/{comment_id}")
-    public View deleteLectureComment(@PathVariable("comment_id") String comment_id) {
+    public View deleteLectureComment(@PathVariable("comment_id") String comment_id, @PathVariable String course_id, @PathVariable String lecture_id) {
         LectureRepo.deleteComment(Integer.parseInt(comment_id));
-        return new RedirectView("/index?successful", true);
+        return new RedirectView("/course/"+course_id+"/ID"+lecture_id, true);
+    }
+
+    public static class commentForm {
+
+        private String user_name;
+        private String comment;
+        private List<MultipartFile> attachments;
+
+        public String getUser_name() {
+            return user_name;
+        }
+
+        public void setUser_name(String user_name) {
+            this.user_name = user_name;
+        }
+
+        public String getComment() {
+            return comment;
+        }
+
+        public void setComment(String comment) {
+            this.comment = comment;
+        }
+
+        public List<MultipartFile> getAttachments() {
+            return attachments;
+        }
+
+        public void setAttachments(List<MultipartFile> attachments) {
+            this.attachments = attachments;
+        }
+
+    }
+
+    @GetMapping("/ID{lecture_id}/comment/add")
+    public ModelAndView addLectureComment() {
+        return new ModelAndView("LectureCommentAdd", "commentForm", new commentForm());
+    }
+
+    @PostMapping("/ID{lecture_id}/comment/add")
+    public ModelAndView addLectureCommentHandle(commentForm form, Model model,
+                                                @PathVariable("lecture_id") String lecture_id, Authentication auth, @PathVariable String course_id) {
+        LectureComment lc = new LectureComment(Integer.parseInt(lecture_id), form.getComment(), auth.getName());
+        LectureRepo.addLectureComment(lc);
+        return new ModelAndView("redirect:/course/"+course_id+"/ID"+lecture_id);
     }
 
 }
+

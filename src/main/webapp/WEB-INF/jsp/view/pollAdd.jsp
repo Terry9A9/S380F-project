@@ -24,5 +24,8 @@
     <form:input type="text" path="ans_d"/><br/><br/>
     <input type="submit" value="Submit"/>
 </form:form>
+<form action="/poll${id}" method="get">
+    <input type="submit" value="Back"/>
+</form>
 </body>
 </html>

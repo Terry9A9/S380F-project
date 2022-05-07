@@ -1,6 +1,7 @@
 package hkmu.comps380f.dao;
 
 import hkmu.comps380f.model.Course;
+import hkmu.comps380f.model.PollQuestion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -59,5 +60,34 @@ public class CourseRepositoryImpl implements CourseRepository {
         final String SQL_INSERT_student
                 = "insert into COURSE_INFO values (?, ?)";
         jdbcOp.update(SQL_INSERT_student, course_code.toUpperCase(), course_name);
+    }
+    private static final class PollQuestionExtractor implements ResultSetExtractor<List<PollQuestion>> {
+        @Override
+        public List<PollQuestion> extractData(ResultSet rs)
+                throws SQLException, DataAccessException {
+            Map<String, PollQuestion> map = new HashMap<>();
+            while (rs.next()) {
+                String course_code = rs.getString("course_code");
+                String poll_id = rs.getString("poll_id");
+                String poll_question = rs.getString("poll_question");
+                PollQuestion pollQuestion = map.get(course_code);
+                if (pollQuestion == null) {
+                    pollQuestion = new PollQuestion();
+                    pollQuestion.setCourse_code(course_code);
+                    pollQuestion.setpoll_id(poll_id);
+                    pollQuestion.setPoll_question(poll_question);
+                    map.put(course_code, pollQuestion);
+                }
+            }
+            return new ArrayList<>(map.values());
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PollQuestion> findPollQuestion() {
+        final String SQL_SELECT_PollQuestion = "SELECT poll_id, poll_question, course_code FROM poll";
+        return jdbcOp.query(SQL_SELECT_PollQuestion, new CourseRepositoryImpl.PollQuestionExtractor());
+
     }
 }

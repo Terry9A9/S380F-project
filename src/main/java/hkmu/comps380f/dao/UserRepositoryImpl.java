@@ -27,18 +27,6 @@ public class UserRepositoryImpl implements UserRepository {
         this.jdbcOp = new JdbcTemplate(dataSource);
     }
 
-    //    private static final class UserRowMapper implements RowMapper<Users> {
-//        @Override
-//        public Users mapRow(ResultSet rs, int i) throws SQLException {
-//            Users entry = new Users();
-//            entry.setId(rs.getInt("id"));
-//            entry.setName(rs.getString("name"));
-//            entry.setMessage(rs.getString("message"));
-//            entry.setDate(toDate(rs.getTimestamp("date")));
-//            return entry;
-//        }
-//    }
-
     private static final String SQL_INSERT_student
             = "insert into USER_INFO values (?, ?, ?, ?, ?,?)";
 

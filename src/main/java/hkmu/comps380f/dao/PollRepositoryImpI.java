@@ -1,6 +1,7 @@
 package hkmu.comps380f.dao;
 
 import hkmu.comps380f.model.Poll;
+import hkmu.comps380f.model.PollComment;
 import hkmu.comps380f.model.User_choice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -40,13 +41,6 @@ public class PollRepositoryImpI implements PollRepository {
         final String SQL_DELETE_poll
                 = "delete from POLL where POLL_ID = ?";
         jdbcOp.update(SQL_DELETE_poll, poll_id);
-    }
-
-    @Override
-    public void deleteComment(int comment_id) {
-        final String SQL_DELETE_poll
-                = "delete from POLL_COMMENTS where POLL_CID = ?";
-        jdbcOp.update(SQL_DELETE_poll, comment_id);
     }
 
     @Override
@@ -117,9 +111,14 @@ public class PollRepositoryImpI implements PollRepository {
                     User_choice.setUser_name(rs.getString("User_name"));
                     User_choice.setUser_choice(rs.getString("User_choice"));
                     User_choice.setPoll_id(rs.getInt("Poll_id"));
+                    User_choice.setQuestion(rs.getString("POLL_QUESTION"));
+                    User_choice.setAns_a(rs.getString("ans_a"));
+                    User_choice.setAns_b(rs.getString("ans_b"));
+                    User_choice.setAns_c(rs.getString("ans_c"));
+                    User_choice.setAns_d(rs.getString("ans_d"));
+                    User_choice.setCourse_code(rs.getString("course_code"));
                     map.put(id, User_choice);
                 }
-
             }
             return new ArrayList<>(map.values());
         }
@@ -150,7 +149,7 @@ public class PollRepositoryImpI implements PollRepository {
 
     @Override
     public List<User_choice> findH(String name) {
-        return jdbcOp.query("select * from User_choice where user_name = ?", new HExtractor(), name);
+        return jdbcOp.query("select u.*, p.* from User_choice u, poll p where u.POLL_ID = p.POLL_ID and user_name = ?", new HExtractor(), name);
     }
 
     @Override
@@ -166,4 +165,49 @@ public class PollRepositoryImpI implements PollRepository {
                 = "update User_choice SET user_choice=? where user_name=? and poll_id=?";
         jdbcOp.update(SQL_UPDATE_User_choice, User_choice, User_name, poll_id);
     }
+
+    private static final class PollCommentExtractor implements ResultSetExtractor<List<PollComment>> {
+
+        @Override
+        public List<PollComment> extractData(ResultSet rs) throws SQLException, DataAccessException {
+            Map<Integer, PollComment> map = new HashMap<>();
+            while (rs.next()) {
+                Integer id = rs.getInt("poll_cid");
+                PollComment pollcomment = map.get(id);
+                if (pollcomment == null) {
+                        pollcomment = new PollComment();
+                    pollcomment.setComment(rs.getString("comments"));
+                    pollcomment.setPoll_cId(id);
+                    pollcomment.setUser_name(rs.getString("user_name"));
+                    map.put(id, pollcomment);
+                }
+            }
+            return new ArrayList<>(map.values());
+        }
+    }
+
+    private static final String SQL_INSERT_COMMENT
+            = "insert into POLL_COMMENTS (COMMENTS, POLL_ID, USER_NAME) values (?, ?, ?)";
+
+    @Override
+    @Transactional
+    public void addPollComment(PollComment comment) {
+        jdbcOp.update(SQL_INSERT_COMMENT, comment.getComment(), comment.getPoll_cId(), comment.getUser_name());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PollComment> findPollComment(int poll_id) {
+        final String SQL_SELECT_Comment_BY_ID
+                = "select * from POLL_COMMENTS where poll_id = ?";
+        return jdbcOp.query(SQL_SELECT_Comment_BY_ID, new PollCommentExtractor(), poll_id);
+    }
+
+    @Override
+    public void deleteComment(int comment_id) {
+        final String SQL_DELETE_poll
+                = "delete from POLL_COMMENTS where POLL_CID = ?";
+        jdbcOp.update(SQL_DELETE_poll, comment_id);
+    }
+
 }
