@@ -15,6 +15,9 @@
     <input type="submit" value="Home"/>
 </form>
 <h1>Lecture Comment History</h1>
+<c:if test="${fn:length(cH) == 0}">
+    <h2>There are no Comment History in the Lecture.</h2>
+</c:if>
 <c:forEach items="${cH}" var="c">
     <li>
         [${c.course_code}] Lecture ${c.lecture_num} Comment: <a
@@ -23,6 +26,9 @@
 </c:forEach>
 <br/>
 <h1>Poll Comment History</h1>
+<c:if test="${fn:length(cpH) == 0}">
+    <h2>There are no Comment History in the Poll.</h2>
+</c:if>
 <c:forEach items="${cpH}" var="d">
     <li>
         POLL ${d.poll_id} Comment: <a href="/poll${d.poll_id}">${d.comment}</a>

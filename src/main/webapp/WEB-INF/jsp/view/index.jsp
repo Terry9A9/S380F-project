@@ -77,7 +77,7 @@
     <form action="/index/commentHistory" method="get" style="display: inline">
         <input type="submit" value="My Comment History"style="display: inline"/>
     </form>
-    <br/><br/>
+    <br/>
 </security:authorize>
 
 <security:authorize access="isAnonymous()">

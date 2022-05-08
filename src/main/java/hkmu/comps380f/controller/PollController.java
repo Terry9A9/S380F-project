@@ -110,6 +110,6 @@ public class PollController {
     @GetMapping("/delete")
     public View deletePoll(@PathVariable("poll_id") String poll_id) {
         PollRepo.delete(Integer.parseInt(poll_id));
-        return new RedirectView("/poll"+poll_id, true);
+        return new RedirectView("/index?successful", true);
     }
 }

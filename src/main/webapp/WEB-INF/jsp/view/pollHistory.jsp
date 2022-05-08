@@ -18,8 +18,12 @@
 </form>
 
 <h1>Poll History</h1>
+<c:if test="${fn:length(H) == 0}">
+    <h2>There are no Poll History in the system.</h2>
+</c:if>
 <c:forEach items="${H}" var="a">
     <c:url var="url" value="/poll${a.poll_id}">${a.question}"></c:url>
+
     <li>
         <c:choose>
             <c:when test="${a.user_choice == 'a'}">
@@ -37,7 +41,7 @@
                 You choose: (${a.user_choice}) ${a.ans_c}
             </c:when>
 
-            <c:when test="${a.user_choice    == 'd'}">
+            <c:when test="${a.user_choice == 'd'}">
                 (${a.course_code}) Poll Q: <a href="${url}">${a.question}</a>
                 You choose: (${a.user_choice}) ${a.ans_d}
             </c:when>

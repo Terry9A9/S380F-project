@@ -81,25 +81,38 @@ public class UsersController {
 
     @GetMapping("/registration")
     public ModelAndView Registration() {
-
         return new ModelAndView("registration", "User", new Form());
     }
 
     @PostMapping("/registration")
     public ModelAndView addStudentHandle(Form form, Model model) {
-        boolean success = true;
         try {
             WebUser user = new WebUser(form.getUsername(), form.getPassword(), form.fullName, form.phoneNumber,
                     form.getAddress(), "ROLE_USER");
             UserRepo.addUser(user);
+            return new ModelAndView("redirect:/login?regSuccessful");
         } catch (Exception e) {
             System.out.println(e);
-            success = false;
+            model.addAttribute("error", "Error");
+            return new ModelAndView("registration", "User", new Form());
         }
-        if (success) {
-            return new ModelAndView("redirect:/login?regSuccessful");
-        } else {
+    }
 
+    @GetMapping("/add")
+    public ModelAndView addUser() {
+        return new ModelAndView("registration", "User", new Form());
+    }
+
+    @PostMapping("/add")
+    public ModelAndView addUserHandle(Form form, Model model) {
+        boolean success = true;
+        try {
+            WebUser user = new WebUser(form.getUsername(), form.getPassword(), form.getFullName(), form.getPhoneNumber(),
+                    form.getAddress(), form.getRole());
+            UserRepo.addUser(user);
+            return new ModelAndView("redirect:/login?regSuccessful");
+        } catch (Exception e) {
+            System.out.println(e);
             model.addAttribute("error", "Error");
             return new ModelAndView("registration", "User", new Form());
         }
@@ -115,16 +128,10 @@ public class UsersController {
     public ModelAndView queryUserHandle(Form form, Model model, @PathVariable("username") String username) {
         WebUser user = new WebUser(form.getUsername(), form.getPassword(), form.fullName, form.phoneNumber,
                 form.getAddress(), form.getRole());
-        boolean success = true;
         try {
             UserRepo.updateUser(user, username);
-        } catch (Exception DerbySQLIntegrityConstraintViolationException) {
-
-            success = false;
-        }
-        if (success) {
             return new ModelAndView("redirect:/index?editSuccessful");
-        } else {
+        } catch (Exception DerbySQLIntegrityConstraintViolationException) {
             model.addAttribute("error", "error");
             model.addAttribute("UserInfo", UserRepo.findUser(username));
             return new ModelAndView("registration", "User", new Form());
