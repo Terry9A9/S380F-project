@@ -77,7 +77,7 @@
     <form action="/index/commentHistory" method="get" style="display: inline">
         <input type="submit" value="My Comment History"style="display: inline"/>
     </form>
-    <br/>
+    <br/><br/>
 </security:authorize>
 
 <security:authorize access="isAnonymous()">
@@ -97,7 +97,7 @@
     <c:if test="${param.addSuccessful != null}">
         <p style="color: green">Add Successful</p>
     </c:if>
-    <a href="/user/registration">Add new user</a><br/>
+    <a href="/user/add">Add new user</a><br/>
     <c:choose>
         <c:when test="${fn:length(Users) == 0}">
             <h2>There are no users in the system.</h2>
