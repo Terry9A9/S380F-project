@@ -1,9 +1,6 @@
 package hkmu.comps380f.dao;
 
-import hkmu.comps380f.model.Attachment;
-import hkmu.comps380f.model.Lecture;
-import hkmu.comps380f.model.LectureComment;
-import hkmu.comps380f.model.User_choice;
+import hkmu.comps380f.model.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -33,5 +30,7 @@ public interface LectureRepository {
     public void deleteComment(int lecture_id);
 
     public List<LectureComment> findH(String name);
+
+    public List<PollComment> findPH(String name);
 
 }

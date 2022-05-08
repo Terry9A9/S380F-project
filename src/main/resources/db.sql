@@ -137,6 +137,9 @@ VALUES ('Which date do you prefer for the mid-term test?', 'COMPS380F', '7/5', '
 INSERT INTO POLL (POLL_QUESTION, COURSE_CODE, ANS_A, ANS_B, ANS_C, ANS_D)
 VALUES ('Which date do you prefer for the mid-term test?', 'COMPS313F', '9/5', '10/5', '11/5', '12/5');
 
+INSERT INTO POLL (POLL_QUESTION, COURSE_CODE, ANS_A, ANS_B, ANS_C, ANS_D)
+VALUES ('do u love 380?', 'COMPS380F', 'yes', 'no', 'not at all', 'idk');
+
 ----------------------USER_CHOICE-------------------------
 
 INSERT INTO USER_CHOICE (USER_NAME, USER_CHOICE, POLL_ID)

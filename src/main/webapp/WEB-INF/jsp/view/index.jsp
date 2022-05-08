@@ -190,15 +190,20 @@
                     <thead>
                     <tr>
                         <td>Poll</td>
+                        <security:authorize access="hasRole('ADMIN')">
+                            <th>Action</th>
+                        </security:authorize>
                     </tr>
                     </thead>
                     <tbody>
-
                     <c:forEach items="${PollQuestion}" var="q">
                         <c:if test="${course.course_code == q.course_code}">
                             <tr>
-                                <td>Question: <a href="/poll${q.poll_id}">${q.poll_question}</a>
-                                </td>
+                                <td>Question: <a href="/poll${q.poll_id}">${q.poll_question}</a></td>
+                                <security:authorize access="hasRole('ADMIN')">
+                                    <td><a href="/poll${q.poll_id}/delete">[Delete]</a></td>
+                                </security:authorize>
+
                             </tr>
                         </c:if>
                     </c:forEach>

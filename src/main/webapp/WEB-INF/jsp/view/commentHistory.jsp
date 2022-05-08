@@ -14,11 +14,18 @@
 <form action="/" method="get">
     <input type="submit" value="Home"/>
 </form>
-<h1>Comment History</h1>
+<h1>Lecture Comment History</h1>
 <c:forEach items="${cH}" var="c">
     <li>
         [${c.course_code}] Lecture ${c.lecture_num} Comment: <a
             href="/course/${c.course_code}/ID${c.lectureId}">${c.comment}</a>
+    </li>
+</c:forEach>
+<br/>
+<h1>Poll Comment History</h1>
+<c:forEach items="${cpH}" var="d">
+    <li>
+        POLL ${d.poll_id} Comment: <a href="/poll${d.poll_id}">${d.comment}</a>
     </li>
 </c:forEach>
 </body>

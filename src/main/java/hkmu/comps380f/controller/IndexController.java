@@ -81,6 +81,7 @@ public class IndexController {
     @GetMapping("/commentHistory")
     public String commentHistory(ModelMap model, Authentication authentication) {
         model.addAttribute("cH", LectureRepo.findH(authentication.getName()));
+        model.addAttribute("cpH", LectureRepo.findPH(authentication.getName()));
         return "commentHistory";
     }
 }

@@ -1,9 +1,6 @@
 package hkmu.comps380f.dao;
 
-import hkmu.comps380f.model.Attachment;
-import hkmu.comps380f.model.Lecture;
-import hkmu.comps380f.model.LectureComment;
-import hkmu.comps380f.model.User_choice;
+import hkmu.comps380f.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.*;
@@ -229,13 +226,41 @@ public class LectureRepositoryImpI implements LectureRepository {
                 LectureComment lc = map.get(id);
                 if (lc == null) {
                     lc = new LectureComment();
-                    lc.setLectureId(id);
+                    lc.setLectureId(rs.getInt("lecture_id"));
                     lc.setUser_name(rs.getString("User_name"));
                     lc.setComment(rs.getString("comments"));
                     lc.setTitle(rs.getString("title"));
                     lc.setCourse_code(rs.getString("course_code"));
                     lc.setLecture_num(rs.getString("lecture_num"));
                     map.put(id, lc);
+                }
+            }
+            return new ArrayList<>(map.values());
+        }
+    }
+
+    @Override
+    public List<PollComment> findPH(String name) {
+        return jdbcOp.query("select * from POLL_COMMENTS  where USER_NAME = ?", new pHExtractor(), name);
+    }
+
+
+
+    private static final class pHExtractor implements ResultSetExtractor<List<PollComment>> {
+
+        @Override
+        public List<PollComment> extractData(ResultSet rs) throws SQLException, DataAccessException {
+            Map<Integer, PollComment> map = new HashMap<>();
+            while (rs.next()) {
+                Integer id = rs.getInt("poll_cid");
+                PollComment pc = map.get(id);
+                if (pc == null) {
+                    pc = new PollComment();
+                    pc.setPoll_cId(id);
+                    pc.setUser_name(rs.getString("User_name"));
+                    pc.setComment(rs.getString("comments"));
+                    pc.setPoll_id(rs.getInt("poll_id"));
+                    map.put(id, pc);
                 }
             }
             return new ArrayList<>(map.values());

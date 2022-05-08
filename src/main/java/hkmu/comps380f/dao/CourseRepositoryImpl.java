@@ -70,13 +70,13 @@ public class CourseRepositoryImpl implements CourseRepository {
                 String course_code = rs.getString("course_code");
                 String poll_id = rs.getString("poll_id");
                 String poll_question = rs.getString("poll_question");
-                PollQuestion pollQuestion = map.get(course_code);
+                PollQuestion pollQuestion = map.get(poll_id);
                 if (pollQuestion == null) {
                     pollQuestion = new PollQuestion();
                     pollQuestion.setCourse_code(course_code);
                     pollQuestion.setpoll_id(poll_id);
                     pollQuestion.setPoll_question(poll_question);
-                    map.put(course_code, pollQuestion);
+                    map.put(poll_id, pollQuestion);
                 }
             }
             return new ArrayList<>(map.values());
@@ -87,7 +87,7 @@ public class CourseRepositoryImpl implements CourseRepository {
     @Transactional(readOnly = true)
     public List<PollQuestion> findPollQuestion() {
         final String SQL_SELECT_PollQuestion = "SELECT poll_id, poll_question, course_code FROM poll";
-        return jdbcOp.query(SQL_SELECT_PollQuestion, new CourseRepositoryImpl.PollQuestionExtractor());
+        return jdbcOp.query(SQL_SELECT_PollQuestion, new PollQuestionExtractor());
 
     }
 }

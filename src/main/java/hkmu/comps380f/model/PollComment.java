@@ -7,6 +7,7 @@ public class PollComment implements Serializable {
     private String comment;
     private String user_name;
     private int poll_cId;
+    private int poll_id;
 
     public PollComment() {
     }
@@ -35,6 +36,14 @@ public class PollComment implements Serializable {
 
     public int getPoll_cId() {
         return poll_cId;
+    }
+
+    public int getPoll_id() {
+        return poll_id;
+    }
+
+    public void setPoll_id(int poll_id) {
+        this.poll_id = poll_id;
     }
 
     public void setPoll_cId(int poll_cId) {
