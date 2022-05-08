@@ -71,12 +71,13 @@
         <input type="submit" value="Log out"/>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </form>
-    <form action="/index/pollHistory" method="get">
-        <input type="submit" value="My Poll History"/>
+    <form action="/index/pollHistory" method="get" style="display: inline">
+        <input type="submit" value="My Poll History" style="display: inline"/>
     </form>
-    <form action="/index/commentHistory" method="get">
-        <input type="submit" value="My Comment History"/>
+    <form action="/index/commentHistory" method="get" style="display: inline">
+        <input type="submit" value="My Comment History"style="display: inline"/>
     </form>
+    <br/><br/>
 </security:authorize>
 
 <security:authorize access="isAnonymous()">

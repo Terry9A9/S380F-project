@@ -149,7 +149,7 @@ public class PollRepositoryImpI implements PollRepository {
 
     @Override
     public List<User_choice> findH(String name) {
-        return jdbcOp.query("select u.*, p.* from User_choice u, poll p where u.POLL_ID = p.POLL_ID and user_name = ?", new HExtractor(), name);
+        return jdbcOp.query("select u.*, p.* from User_choice u, poll p where u.POLL_ID = p.POLL_ID and user_name = ? order by u.POLL_ID", new HExtractor(), name);
     }
 
     @Override

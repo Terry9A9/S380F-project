@@ -15,7 +15,7 @@
             display: block;
             width: 100%;
             overflow: auto;
-            height: 100px;
+            height: 500px;
         }
 
         .comment_table thead tr {

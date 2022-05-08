@@ -24,22 +24,22 @@
         <c:choose>
             <c:when test="${a.user_choice == 'a'}">
                 (${a.course_code}) Poll Q: <a href="${url}">${a.question}</a>
-                You choose (${a.user_choice}) ${a.ans_a}
+                You choose: (${a.user_choice}) ${a.ans_a}
             </c:when>
 
             <c:when test="${a.user_choice == 'b'}">
                 (${a.course_code}) Poll Q: <a href="${url}">${a.question}</a>
-                You choose (${a.user_choice}) ${a.ans_b}
+                You choose: (${a.user_choice}) ${a.ans_b}
             </c:when>
 
             <c:when test="${a.user_choice == 'c'}">
                 (${a.course_code}) Poll Q: <a href="${url}">${a.question}</a>
-                You choose (${a.user_choice}) ${a.ans_c}
+                You choose: (${a.user_choice}) ${a.ans_c}
             </c:when>
 
             <c:when test="${a.user_choice    == 'd'}">
                 (${a.course_code}) Poll Q: <a href="${url}">${a.question}</a>
-                You choose (${a.user_choice}) ${a.ans_d}
+                You choose: (${a.user_choice}) ${a.ans_d}
             </c:when>
         </c:choose>
     </li>

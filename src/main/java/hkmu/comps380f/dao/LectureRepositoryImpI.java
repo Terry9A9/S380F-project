@@ -213,7 +213,9 @@ public class LectureRepositoryImpI implements LectureRepository {
 
     @Override
     public List<LectureComment> findH(String name) {
-        return jdbcOp.query("select c.*, l.COURSE_CODE, l.TITLE, l.LECTURE_NUM from LECTURE_COMMENTS c, LECTURE_INFO l where c.LECTURE_ID = l.LECTURE_ID and USER_NAME = ?", new HExtractor(), name);
+        return jdbcOp.query("select c.*, l.COURSE_CODE, l.TITLE, l.LECTURE_NUM " +
+                "from LECTURE_COMMENTS c, LECTURE_INFO l where c.LECTURE_ID = l.LECTURE_ID and USER_NAME = ? " +
+                "order by COURSE_CODE, LECTURE_NUM", new HExtractor(), name);
     }
 
     private static final class HExtractor implements ResultSetExtractor<List<LectureComment>> {
@@ -241,7 +243,7 @@ public class LectureRepositoryImpI implements LectureRepository {
 
     @Override
     public List<PollComment> findPH(String name) {
-        return jdbcOp.query("select * from POLL_COMMENTS  where USER_NAME = ?", new pHExtractor(), name);
+        return jdbcOp.query("select * from POLL_COMMENTS  where USER_NAME = ? order by POLL_ID", new pHExtractor(), name);
     }
 
 
